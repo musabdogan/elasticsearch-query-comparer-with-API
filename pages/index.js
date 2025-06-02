@@ -106,8 +106,8 @@ export default function Home() {
     setLoading2(true);
     setCurrentPage2(page);
 
-    const from = page * 25; // 25 items per page for Query 2
-    const size = 25;
+    const from = page * ITEMS_PER_PAGE;
+    const size = ITEMS_PER_PAGE;
 
     try {
       // Get new query from file
@@ -143,7 +143,7 @@ export default function Home() {
   , [result]);
 
   const totalPages2 = useMemo(() => 
-    results2?.body?.hits?.total?.value ? Math.ceil(results2.body.hits.total.value / 25) : 0 // 25 items per page for Query 2
+    results2?.body?.hits?.total?.value ? Math.ceil(results2.body.hits.total.value / ITEMS_PER_PAGE) : 0
   , [results2]);
 
   return (
