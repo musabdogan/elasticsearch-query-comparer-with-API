@@ -36,16 +36,58 @@ const ITEMS_PER_PAGE = 10;
 export default function Home() {
   const [esUrl1, setEsUrl1] = useState(process.env.ES_URL_1 || '');
   const [esUrl2, setEsUrl2] = useState(process.env.ES_URL_2 || '');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('searchTerm') || '';
+    }
+    return '';
+  });
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const [usedQueryType, setUsedQueryType] = useState('');
-  const [usedDsl, setUsedDsl] = useState('');
-  const [result, setResult] = useState(null);
+  const [usedQueryType, setUsedQueryType] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('usedQueryType') || '';
+    }
+    return '';
+  });
+  const [usedDsl, setUsedDsl] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('usedDsl') || '';
+    }
+    return '';
+  });
+  const [result, setResult] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedResult = localStorage.getItem('result');
+      return savedResult ? JSON.parse(savedResult) : null;
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(false);
   const [currentPage1, setCurrentPage1] = useState(0);
-  const [results2, setResults2] = useState(null);
+  const [results2, setResults2] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedResults2 = localStorage.getItem('results2');
+      return savedResults2 ? JSON.parse(savedResults2) : null;
+    }
+    return null;
+  });
   const [loading2, setLoading2] = useState(false);
   const [currentPage2, setCurrentPage2] = useState(0);
+
+  // Save state to localStorage when it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('searchTerm', searchTerm);
+      localStorage.setItem('usedQueryType', usedQueryType);
+      localStorage.setItem('usedDsl', usedDsl);
+      if (result) {
+        localStorage.setItem('result', JSON.stringify(result));
+      }
+      if (results2) {
+        localStorage.setItem('results2', JSON.stringify(results2));
+      }
+    }
+  }, [searchTerm, usedQueryType, usedDsl, result, results2]);
 
   // Debounce search term
   useEffect(() => {
