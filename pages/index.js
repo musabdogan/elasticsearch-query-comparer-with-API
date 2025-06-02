@@ -36,8 +36,18 @@ const ITEMS_PER_PAGE = 10;
 
 export default function Home() {
   const router = useRouter();
-  const [esUrl1, setEsUrl1] = useState(process.env.ES_URL_1 || '');
-  const [esUrl2, setEsUrl2] = useState(process.env.ES_URL_2 || '');
+  const [esUrl1, setEsUrl1] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('esUrl1') || process.env.ES_URL_1 || '';
+    }
+    return process.env.ES_URL_1 || '';
+  });
+  const [esUrl2, setEsUrl2] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('esUrl2') || process.env.ES_URL_2 || '';
+    }
+    return process.env.ES_URL_2 || '';
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [usedQueryType, setUsedQueryType] = useState('');
@@ -48,6 +58,14 @@ export default function Home() {
   const [results2, setResults2] = useState(null);
   const [loading2, setLoading2] = useState(false);
   const [currentPage2, setCurrentPage2] = useState(0);
+
+  // Save URLs to localStorage when they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('esUrl1', esUrl1);
+      localStorage.setItem('esUrl2', esUrl2);
+    }
+  }, [esUrl1, esUrl2]);
 
   // Update URL when URLs change
   useEffect(() => {
