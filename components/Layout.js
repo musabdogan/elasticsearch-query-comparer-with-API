@@ -163,6 +163,12 @@ export default function Layout({
                       <EuiText size="xs" color="subdued" style={{ margin: 0 }}>
                         <EuiIcon type="document" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
                         Total Results: <strong>{result.body.hits.total.value}</strong>
+                        {result.body.took && (
+                          <span style={{ marginLeft: 8 }}>
+                            <EuiIcon type="clock" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
+                            Query Time: <strong>{result.body.took}ms</strong>
+                          </span>
+                        )}
                       </EuiText>
                     )}
                   </EuiFlexItem>
@@ -310,6 +316,12 @@ export default function Layout({
                       <EuiText size="xs" color="subdued" style={{ margin: 0 }}>
                         <EuiIcon type="document" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
                         Total Results: <strong>{results2.body.hits.total.value}</strong>
+                        {results2.body.took && (
+                          <span style={{ marginLeft: 8 }}>
+                            <EuiIcon type="clock" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
+                            Query Time: <strong>{results2.body.took}ms</strong>
+                          </span>
+                        )}
                       </EuiText>
                     )}
                   </EuiFlexItem>
