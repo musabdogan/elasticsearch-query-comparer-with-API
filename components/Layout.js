@@ -25,95 +25,7 @@ import {
   EuiToolTip,
 } from '@elastic/eui';
 
-const multiWordDsl = `{
-  "query": {
-    "function_score": {
-      "boost_mode": "multiply",
-      "functions": [
-        {
-          "field_value_factor": {
-            "field": "data.z_product_score_global",
-            "factor": 1,
-            "missing": 1,
-            "modifier": "sqrt"
-          }
-        }
-      ],
-      "query": {
-        "bool": {
-          "filter": [
-            { "term": { "type": { "value": 129 } } },
-            { "terms": { "status": [0, 2] } }
-          ],
-          "must": [
-            { "dis_max": { "queries": [
-              { "match": { "data.name": { "query": "{{term}}" } } },
-              { "match": { "data.sku": { "query": "{{term}}" } } },
-              { "match": { "data.model_code": { "query": "{{term}}" } } },
-              { "match": { "data.manufacturer_label": { "query": "{{term}}" } } },
-              { "match": { "data.short_description": { "query": "{{term}}" } } },
-              { "match": { "data.name": { "analyzer": "english", "query": "{{term}}" } } },
-              { "match": { "data.short_description": { "analyzer": "english", "query": "{{term}}" } } },
-              { "match_phrase": { "data.name": { "boost": 2, "query": "{{term}}" } } },
-              { "match_phrase": { "data.manufacturer_label": { "boost": 2, "query": "{{term}}" } } },
-              { "match_phrase": { "data.short_description": { "boost": 2, "query": "{{term}}" } } }
-            ], "tie_breaker": 0 } }
-          ]
-        }
-      },
-      "score_mode": "multiply"
-    }
-  },
-  "_source": ["data.product_name", "data.model_code"],
-  "size": {{size}},
-  "from": {{from}}
-}`;
-
-const singleWordDsl = `{
-  "query": {
-    "function_score": {
-      "boost_mode": "multiply",
-      "functions": [
-        {
-          "field_value_factor": {
-            "field": "data.z_product_score_global",
-            "factor": 1,
-            "missing": 1,
-            "modifier": "sqrt"
-          }
-        }
-      ],
-      "query": {
-        "bool": {
-          "filter": [
-            { "term": { "type": { "value": 129 } } },
-            { "terms": { "status": [0, 2] } }
-          ],
-          "must": [
-            { "dis_max": { "queries": [
-              { "match": { "data.name": { "query": "{{term}}" } } },
-              { "match": { "data.sku": { "query": "{{term}}" } } },
-              { "match": { "data.model_code": { "query": "{{term}}" } } },
-              { "match": { "data.manufacturer_label": { "query": "{{term}}" } } },
-              { "match": { "data.short_description": { "query": "{{term}}" } } },
-              { "match": { "data.name": { "analyzer": "english", "query": "{{term}}" } } },
-              { "match": { "data.short_description": { "analyzer": "english", "query": "{{term}}" } } },
-              { "match_phrase": { "data.name": { "boost": 2, "query": "{{term}}" } } },
-              { "match_phrase": { "data.manufacturer_label": { "boost": 2, "query": "{{term}}" } } },
-              { "match_phrase": { "data.short_description": { "boost": 2, "query": "{{term}}" } } }
-            ], "tie_breaker": 0 } }
-          ]
-        }
-      },
-      "score_mode": "multiply"
-    }
-  },
-  "_source": ["data.product_name", "data.model_code"],
-  "size": {{size}},
-  "from": {{from}}
-}`;
-
-const ITEMS_PER_PAGE = 10; // Sayfa başına gösterilecek öğe sayısı
+const ITEMS_PER_PAGE = 10;
 
 export default function Layout({
   esUrl1, setEsUrl1,
@@ -127,30 +39,6 @@ export default function Layout({
   query2, setQuery2, results2, loading2,
   currentPage2, handleQuery2, totalPages2,
 }) {
-  console.log('Sorgu 1 - Total Pages 1:', totalPages1, 'Koşul (totalPages1 > 1):', totalPages1 > 1);
-  console.log('Sorgu 2 - Total Pages 2:', totalPages2, 'Koşul (totalPages2 > 1):', totalPages2 > 1);
-  console.log('New Query Result state:', result);
-  console.log('Old Query Results2 state:', results2);
-  if (result) {
-    console.log('New Query Result Body:', result.body);
-    if (result.body) {
-      console.log('New Query Result Body Hits:', result.body.hits);
-      if (result.body.hits) {
-        console.log('New Query Result Body Hits Hits:', result.body.hits.hits);
-        console.log('New Query Result Body Hits Hits Length:', result.body.hits.hits?.length);
-      }
-    }
-  }
-  if (results2) {
-    console.log('Old Query Results2 Body:', results2.body);
-    if (results2.body) {
-      console.log('Old Query Results2 Body Hits:', results2.body.hits);
-      if (results2.body.hits) {
-        console.log('Old Query Results2 Body Hits Hits:', results2.body.hits.hits);
-        console.log('Old Query Results2 Body Hits Hits Length:', results2.body.hits.hits?.length);
-      }
-    }
-  }
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
       <EuiHeader position="fixed" style={{ 
@@ -181,7 +69,7 @@ export default function Layout({
             <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="center">
               <EuiFlexItem grow={false} style={{ width: '300px' }}>
                 <EuiFieldText
-                  placeholder="Arama kelimesi girin..."
+                  placeholder="Enter search term..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   fullWidth
@@ -219,7 +107,7 @@ export default function Layout({
                     boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
                   }}
                 >
-                  Sorgula
+                  Search
                 </EuiButton>
               </EuiFlexItem>
             </EuiFlexGroup>
@@ -274,7 +162,7 @@ export default function Layout({
                     {result?.body?.hits && (
                       <EuiText size="xs" color="subdued" style={{ margin: 0 }}>
                         <EuiIcon type="document" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
-                        Toplam Sonuç: <strong>{result.body.hits.total.value}</strong>
+                        Total Results: <strong>{result.body.hits.total.value}</strong>
                       </EuiText>
                     )}
                   </EuiFlexItem>
@@ -288,7 +176,7 @@ export default function Layout({
                       <EuiFlexItem>
                         {result.body.hits.hits.map((hit, index) => (
                           (index < 5) && (
-                            <div title={hit._source.data.model_code || 'Model kodu bulunamadı'} style={{ cursor: 'help' }}>
+                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
                               <EuiCard
                                 key={hit._id}
                                 title={
@@ -300,7 +188,7 @@ export default function Layout({
                                       right: 0,
                                       bottom: 0,
                                       zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model kodu bulunamadı'} />
+                                    }} title={hit._source.data.model_code || 'Model code not found'} />
                                     {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
                                   </div>
                                 }
@@ -322,7 +210,7 @@ export default function Layout({
                       <EuiFlexItem>
                         {result.body.hits.hits.map((hit, index) => (
                           (index >= 5 && index < 10) && (
-                            <div title={hit._source.data.model_code || 'Model kodu bulunamadı'} style={{ cursor: 'help' }}>
+                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
                               <EuiCard
                                 key={hit._id}
                                 title={
@@ -334,7 +222,7 @@ export default function Layout({
                                       right: 0,
                                       bottom: 0,
                                       zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model kodu bulunamadı'} />
+                                    }} title={hit._source.data.model_code || 'Model code not found'} />
                                     {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
                                   </div>
                                 }
@@ -421,7 +309,7 @@ export default function Layout({
                     {results2?.body?.hits && (
                       <EuiText size="xs" color="subdued" style={{ margin: 0 }}>
                         <EuiIcon type="document" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
-                        Toplam Sonuç: <strong>{results2.body.hits.total.value}</strong>
+                        Total Results: <strong>{results2.body.hits.total.value}</strong>
                       </EuiText>
                     )}
                   </EuiFlexItem>
@@ -435,7 +323,7 @@ export default function Layout({
                       <EuiFlexItem>
                         {results2.body.hits.hits.map((hit, index) => (
                           (index < 5) && (
-                            <div title={hit._source.data.model_code || 'Model kodu bulunamadı'} style={{ cursor: 'help' }}>
+                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
                               <EuiCard
                                 key={hit._id}
                                 title={
@@ -447,7 +335,7 @@ export default function Layout({
                                       right: 0,
                                       bottom: 0,
                                       zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model kodu bulunamadı'} />
+                                    }} title={hit._source.data.model_code || 'Model code not found'} />
                                     {`#${currentPage2 * 25 + index + 1}: ${hit._source.data.product_name}`}
                                   </div>
                                 }
@@ -469,7 +357,7 @@ export default function Layout({
                       <EuiFlexItem>
                         {results2.body.hits.hits.map((hit, index) => (
                           (index >= 5 && index < 10) && (
-                            <div title={hit._source.data.model_code || 'Model kodu bulunamadı'} style={{ cursor: 'help' }}>
+                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
                               <EuiCard
                                 key={hit._id}
                                 title={
@@ -481,7 +369,7 @@ export default function Layout({
                                       right: 0,
                                       bottom: 0,
                                       zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model kodu bulunamadı'} />
+                                    }} title={hit._source.data.model_code || 'Model code not found'} />
                                     {`#${currentPage2 * 25 + index + 1}: ${hit._source.data.product_name}`}
                                   </div>
                                 }
