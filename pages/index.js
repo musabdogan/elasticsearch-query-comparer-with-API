@@ -67,29 +67,6 @@ export default function Home() {
     }
   }, [esUrl1, esUrl2]);
 
-  // Update URL when URLs change
-  useEffect(() => {
-    if (esUrl1 || esUrl2) {
-      const query = {
-        ...(esUrl1 && { url1: esUrl1 }),
-        ...(esUrl2 && { url2: esUrl2 })
-      };
-      router.push({
-        pathname: router.pathname,
-        query
-      }, undefined, { shallow: true });
-    }
-  }, [esUrl1, esUrl2]);
-
-  // Read URLs from query parameters on initial load
-  useEffect(() => {
-    if (router.isReady) {
-      const { url1, url2 } = router.query;
-      if (url1) setEsUrl1(url1);
-      if (url2) setEsUrl2(url2);
-    }
-  }, [router.isReady, router.query]);
-
   // Debounce search term
   useEffect(() => {
     const timer = setTimeout(() => {
