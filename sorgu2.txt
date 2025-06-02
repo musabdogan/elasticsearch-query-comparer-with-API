@@ -1,0 +1,54 @@
+GET musab-test/_search
+{
+  "size": 25,
+  "query": {
+    "function_score": {
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "type": 129 }},
+            { "terms": { "status": [0, 2] }}
+          ],
+          "must": {
+            "dis_max": {
+              "queries": [
+                { "term": { "data.sku": { "value": "TRU-T-49-HC", "boost": 5 }}},
+                { "term": { "data.model_code": { "value": "TRU-T-49-HC", "boost": 5 }}},
+                { "match_phrase": { "data.name": { "query": "TRU-T-49-HC", "boost": 5 }}},
+                { "match_phrase": { "data.short_description": { "query": "TRU-T-49-HC", "boost": 3 }}},
+                { "match_phrase": { "data.manufacturer_label": { "query": "TRU-T-49-HC", "boost": 3 }}},
+                { "match_phrase": { "data.product_name.keyword": { "query": "TRU-T-49-HC", "boost": 3 }}},
+                { "match": { "data.name": { "query": "TRU-T-49-HC", "operator": "and" }}},
+                { "match": { "data.short_description": { "query": "TRU-T-49-HC", "operator": "and" }}},
+                { "match": { "data.manufacturer_label": { "query": "TRU-T-49-HC", "operator": "and" }}},
+                { "match": { "data.product_name.keyword": { "query": "TRU-T-49-HC", "operator": "and" }}},
+                { "wildcard": { "data.name": { "value": "*TRU-T-49-HC*" }}},
+                { "wildcard": { "data.manufacturer_label": { "value": "*TRU-T-49-HC*" }}},
+                { "wildcard": { "data.short_description.keyword": { "value": "*TRU-T-49-HC*"}}},
+                { "wildcard": { "data.sku": { "value": "*TRU-T-49-HC*"}}},
+                { "wildcard": { "data.model_code": { "value": "*TRU-T-49-HC*"}}},
+                { "wildcard": { "data.product_name.keyword": { "value": "*TRU-T-49-HC*"}}}
+              ],
+              "tie_breaker": 0.3
+            }
+          }
+        }
+      },
+      "functions": [
+        {
+          "field_value_factor": {
+            "field": "data.z_product_score_global",
+            "factor": 1,
+            "modifier": "sqrt",
+            "missing": 1
+          }
+        }
+      ],
+      "boost_mode": "multiply",
+      "score_mode": "multiply"
+    }
+  },
+  "_source": ["data.product_name"],
+  "size": {{size}},
+  "from": {{from}}
+}

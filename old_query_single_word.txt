@@ -1,0 +1,52 @@
+{
+  "track_total_hits": true,
+  "query": {
+    "function_score": {
+      "boost_mode": "multiply",
+      "functions": [
+        {
+          "field_value_factor": {
+            "field": "data.z_product_score_global",
+            "factor": 1,
+            "missing": 1,
+            "modifier": "sqrt"
+          }
+        }
+      ],
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "type": { "value": 129 } } },
+            { "terms": { "status": [0, 2] } }
+          ],
+          "must": [
+            { "dis_max": { "queries": [
+              { "match": { "data.name": { "query": "{{term}}" } } },
+              { "match": { "data.sku": { "query": "{{term}}" } } },
+              { "match": { "data.model_code": { "query": "{{term}}" } } },
+              { "match": { "data.manufacturer_label": { "query": "{{term}}" } } },
+              { "match": { "data.short_description": { "query": "{{term}}" } } },
+              { "match": { "data.name": { "analyzer": "english", "query": "{{term}}" } } },
+              { "match": { "data.short_description": { "analyzer": "english", "query": "{{term}}" } } },
+              { "match_phrase": { "data.name": { "boost": 2, "query": "{{term}}" } } },
+              { "match_phrase": { "data.manufacturer_label": { "boost": 2, "query": "{{term}}" } } },
+              { "match_phrase": { "data.short_description": { "boost": 2, "query": "{{term}}" } } },
+              { "prefix": { "data.name": { "value": "{{term}}" } } },
+              { "prefix": { "data.manufacturer_label": { "value": "{{term}}" } } },
+              { "prefix": { "data.short_description": { "value": "{{term}}" } } },
+              { "wildcard": { "data.name": { "value": "*{{term}}*" } } },
+              { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*" } } },
+              { "wildcard": { "data.short_description": { "value": "*{{term}}*" } } },
+              { "term": { "data.sku": { "value": "{{term}}" } } },
+              { "term": { "data.model_code": { "value": "{{term}}" } } }
+            ], "tie_breaker": 0 } }
+          ]
+        }
+      },
+      "score_mode": "multiply"
+    }
+  },
+  "_source": ["data.name", "data.sku", "data.model_code", "data.z_product_score_global", "data.short_description", "data.product_name", "data.manufacturer_label", "data.product_name"],
+  "size": {{size}},
+  "from": {{from}}
+} 
