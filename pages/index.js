@@ -31,11 +31,159 @@ const sideNav = [
   { name: 'Settings', id: 'settings', items: [] },
 ];
 
+const multiWordDsl = `{
+  "query": {
+    "function_score": {
+      "boost_mode": "multiply",
+      "functions": [
+        {
+          "field_value_factor": {
+            "field": "data.z_product_score_global",
+            "factor": 1,
+            "missing": 1,
+            "modifier": "sqrt"
+          }
+        }
+      ],
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "type": { "value": 129 } } },
+            { "terms": { "status": [0, 2] } }
+          ],
+          "must": [
+            { "dis_max": { "queries": [
+              { "match": { "data.name": { "query": "{{term}}" } } },
+              { "match": { "data.sku": { "query": "{{term}}" } } },
+              { "match": { "data.model_code": { "query": "{{term}}" } } },
+              { "match": { "data.manufacturer_label": { "query": "{{term}}" } } },
+              { "match": { "data.short_description": { "query": "{{term}}" } } },
+              { "match": { "data.name": { "analyzer": "english", "query": "{{term}}" } } },
+              { "match": { "data.short_description": { "analyzer": "english", "query": "{{term}}" } } },
+              { "match_phrase": { "data.name": { "boost": 2, "query": "{{term}}" } } },
+              { "match_phrase": { "data.manufacturer_label": { "boost": 2, "query": "{{term}}" } } },
+              { "match_phrase": { "data.short_description": { "boost": 2, "query": "{{term}}" } } }
+            ], "tie_breaker": 0 } }
+          ]
+        }
+      },
+      "score_mode": "multiply"
+    }
+  },
+  "_source": ["data.product_name"],
+  "size": {{size}},
+  "from": {{from}}
+}`;
+
+const singleWordDsl = `{
+  "query": {
+    "function_score": {
+      "boost_mode": "multiply",
+      "functions": [
+        {
+          "field_value_factor": {
+            "field": "data.z_product_score_global",
+            "factor": 1,
+            "missing": 1,
+            "modifier": "sqrt"
+          }
+        }
+      ],
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "type": { "value": 129 } } },
+            { "terms": { "status": [0, 2] } }
+          ],
+          "must": [
+            { "dis_max": { "queries": [
+              { "match": { "data.name": { "query": "{{term}}" } } },
+              { "match": { "data.sku": { "query": "{{term}}" } } },
+              { "match": { "data.model_code": { "query": "{{term}}" } } },
+              { "match": { "data.manufacturer_label": { "query": "{{term}}" } } },
+              { "match": { "data.short_description": { "query": "{{term}}" } } },
+              { "match": { "data.name": { "analyzer": "english", "query": "{{term}}" } } },
+              { "match": { "data.short_description": { "analyzer": "english", "query": "{{term}}" } } },
+              { "match_phrase": { "data.name": { "boost": 2, "query": "{{term}}" } } },
+              { "match_phrase": { "data.manufacturer_label": { "boost": 2, "query": "{{term}}" } } },
+              { "match_phrase": { "data.short_description": { "boost": 2, "query": "{{term}}" } } },
+              { "prefix": { "data.name": { "value": "{{term}}" } } },
+              { "prefix": { "data.manufacturer_label": { "value": "{{term}}" } } },
+              { "prefix": { "data.short_description": { "value": "{{term}}" } } },
+              { "wildcard": { "data.name": { "value": "*{{term}}*" } } },
+              { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*" } } },
+              { "wildcard": { "data.short_description": { "value": "*{{term}}*" } } },
+              { "term": { "data.sku": { "value": "{{term}}" } } },
+              { "term": { "data.model_code": { "value": "{{term}}" } } }
+            ], "tie_breaker": 0 } }
+          ]
+        }
+      },
+      "score_mode": "multiply"
+    }
+  },
+  "_source": ["data.product_name"],
+  "size": {{size}},
+  "from": {{from}}
+}`;
+
+const oldQueryDsl = `{
+  "size": 25,
+  "query": {
+    "function_score": {
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "type": 129 } },
+            { "terms": { "status": [0, 2] } }
+          ],
+          "must": {
+            "dis_max": {
+              "queries": [
+                { "term": { "data.sku": { "value": "{{term}}", "boost": 5 } } },
+                { "term": { "data.model_code": { "value": "{{term}}", "boost": 5 } } },
+                { "match_phrase": { "data.name": { "query": "{{term}}", "boost": 5 } } },
+                { "match_phrase": { "data.short_description": { "query": "{{term}}", "boost": 3 } } },
+                { "match_phrase": { "data.manufacturer_label": { "query": "{{term}}", "boost": 3 } } },
+                { "match_phrase": { "data.product_name.keyword": { "query": "{{term}}", "boost": 3 } } },
+                { "match": { "data.name": { "query": "{{term}}", "operator": "and" } } },
+                { "match": { "data.short_description": { "query": "{{term}}", "operator": "and" } } },
+                { "match": { "data.manufacturer_label": { "query": "{{term}}", "operator": "and" } } },
+                { "match": { "data.product_name.keyword": { "query": "{{term}}", "operator": "and" } } },
+                { "wildcard": { "data.name": { "value": "*{{term}}*" } } },
+                { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*" } } },
+                { "wildcard": { "data.short_description.keyword": { "value": "*{{term}}*" } } },
+                { "wildcard": { "data.sku": { "value": "*{{term}}*" } } },
+                { "wildcard": { "data.model_code": { "value": "*{{term}}*" } } },
+                { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*" } } }
+              ],
+              "tie_breaker": 0.3
+            }
+          }
+        }
+      },
+      "functions": [
+        {
+          "field_value_factor": {
+            "field": "data.z_product_score_global",
+            "factor": 1,
+            "modifier": "sqrt",
+            "missing": 1
+          }
+        }
+      ],
+      "boost_mode": "multiply",
+      "score_mode": "multiply"
+    }
+  },
+  "_source": ["data.name", "data.sku", "data.model_code", "data.z_product_score_global", "data.short_description", "data.product_name", "data.manufacturer_label", "data.product_name"]
+}`;
+
 const ITEMS_PER_PAGE = 10; // Sayfa başına gösterilecek öğe sayısı
 
 export default function Home() {
-  const [esUrl1, setEsUrl1] = useState('http://5.161.224.189:31597/butterfly_dev');
-  const [esUrl2, setEsUrl2] = useState('http://5.161.224.189:31597/musab-test');
+  const [esUrl1, setEsUrl1] = useState(process.env.ES_URL_1 || '');
+  const [esUrl2, setEsUrl2] = useState(process.env.ES_URL_2 || '');
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [usedQueryType, setUsedQueryType] = useState('');
