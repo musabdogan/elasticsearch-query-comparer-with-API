@@ -336,7 +336,7 @@ export default function Layout({
                                       bottom: 0,
                                       zIndex: 1
                                     }} title={hit._source.data.model_code || 'Model code not found'} />
-                                    {`#${currentPage2 * 25 + index + 1}: ${hit._source.data.product_name}`}
+                                    {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
                                   </div>
                                 }
                                 description={null}
@@ -370,7 +370,7 @@ export default function Layout({
                                       bottom: 0,
                                       zIndex: 1
                                     }} title={hit._source.data.model_code || 'Model code not found'} />
-                                    {`#${currentPage2 * 25 + index + 1}: ${hit._source.data.product_name}`}
+                                    {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
                                   </div>
                                 }
                                 description={null}
