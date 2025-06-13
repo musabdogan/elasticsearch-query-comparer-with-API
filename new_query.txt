@@ -28,7 +28,8 @@
                 { "wildcard": { "data.short_description.keyword": { "value": "*{{term}}*" } } },
                 { "wildcard": { "data.sku": { "value": "*{{term}}*" } } },
                 { "wildcard": { "data.model_code": { "value": "*{{term}}*" } } },
-                { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*" } } }
+                { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*" } } },
+                { "match": { "data.name": { "query": "{{term}}", "operator": "and", "fuzziness": "auto"}}}
               ],
               "tie_breaker": 0.3
             }
