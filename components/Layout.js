@@ -38,6 +38,7 @@ export default function Layout({
   currentPage1, handleSearch, totalPages1,
   query2, setQuery2, results2, loading2,
   currentPage2, handleQuery2, totalPages2,
+  newQueryWordCount
 }) {
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
@@ -126,7 +127,7 @@ export default function Layout({
                       <h3 style={{ color: '#1a73e8', margin: 0, fontSize: '16px' }}>Old Query</h3>
                     </EuiTitle>
                   </EuiFlexItem>
-                  <EuiFlexItem grow={false} style={{ width: '400px' }}>
+                  <EuiFlexItem grow={false} style={{ width: '375px' }}>
                     <EuiFieldText
                       label="URL"
                       placeholder="http://localhost:9200/index"
@@ -286,7 +287,7 @@ export default function Layout({
                       <h3 style={{ color: '#1a73e8', margin: 0, fontSize: '16px' }}>New Query</h3>
                     </EuiTitle>
                   </EuiFlexItem>
-                  <EuiFlexItem grow={false} style={{ width: '400px' }}>
+                  <EuiFlexItem grow={false} style={{ width: '375px' }}>
                     <EuiFieldText
                       label="URL"
                       placeholder="http://localhost:9200/index"
@@ -312,6 +313,14 @@ export default function Layout({
                     />
                   </EuiFlexItem>
                   <EuiFlexItem grow={true}>
+                    {typeof newQueryWordCount === 'number' && newQueryWordCount > 0 && (
+                      <EuiBadge color="primary" iconType="tag" size="s" style={{ 
+                        background: '#1a73e8', 
+                        marginRight: 8,
+                        borderRadius: '6px',
+                        color: '#fff'
+                      }}>Number of words: {newQueryWordCount}</EuiBadge>
+                    )}
                     {results2?.body?.hits && (
                       <EuiText size="xs" color="subdued" style={{ margin: 0 }}>
                         <EuiIcon type="document" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />

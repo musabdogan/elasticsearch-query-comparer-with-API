@@ -8,6 +8,10 @@ export default async function handler(req, res) {
   try {
     const { url, username, password, index, query } = req.body;
 
+    if (!query) {
+      return res.status(400).json({ error: 'Query object is required in the request body.' });
+    }
+
     // URL'den index pattern'i çıkar
     const baseUrl = url.split('/').slice(0, -1).join('/');
     const urlIndexPattern = url.split('/').pop();

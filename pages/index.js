@@ -58,6 +58,7 @@ export default function Home() {
   const [results2, setResults2] = useState(null);
   const [loading2, setLoading2] = useState(false);
   const [currentPage2, setCurrentPage2] = useState(0);
+  const [newQueryWordCount, setNewQueryWordCount] = useState(0);
 
   // Save URLs to localStorage when they change
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
+      setNewQueryWordCount(searchTerm.trim() ? searchTerm.trim().split(/\s+/).length : 0);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -92,11 +94,10 @@ export default function Home() {
     const size = ITEMS_PER_PAGE;
 
     try {
-      // Get DSL query from file
+      // Old logic for Old Query
       const queryType = searchTerm.trim().split(/\s+/).length > 1 ? 'old_query_multi_word' : 'old_query_single_word';
       const dslResponse = await fetch(`/api/dsl?query=${queryType}`);
       const { dsl } = await dslResponse.json();
-
       // Prepare DSL
       const preparedDsl = dsl.replace(/\{\{term\}\}/g, searchTerm.trim())
                             .replace(/\{\{size\}\}/g, size)
@@ -130,21 +131,23 @@ export default function Home() {
     const size = ITEMS_PER_PAGE;
 
     try {
-      // Get new query from file
-      const dslResponse = await fetch('/api/dsl?query=new_query');
+      // Always use the new template endpoint for New Query
+      const dslResponse = await fetch(`/api/dsl?query=query_template&term=${encodeURIComponent(searchTerm.trim())}&size=${size}&from=${from}`);
       const { dsl } = await dslResponse.json();
-
-      // Prepare DSL
-      const preparedDsl = dsl.replace(/\{\{term\}\}/g, searchTerm.trim())
-                            .replace(/\{\{size\}\}/g, size)
-                            .replace(/\{\{from\}\}/g, from);
+      console.log('Fetched DSL:', dsl);
+      if (!dsl) {
+        setResults2({ error: 'No query was generated from the template.' });
+        setLoading2(false);
+        return;
+      }
+      const preparedDsl = dsl;
 
       const response2 = await fetch('/api/elasticsearch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           url: esUrl2,
-          query: JSON.parse(preparedDsl),
+          query: preparedDsl,
         }),
       });
       const data2 = await response2.json();
@@ -186,6 +189,7 @@ export default function Home() {
       currentPage2={currentPage2}
       handleQuery2={handleQuery2}
       totalPages2={totalPages2}
+      newQueryWordCount={newQueryWordCount}
     />
   );
 } 
