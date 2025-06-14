@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   EuiHeader,
   EuiHeaderSection,
@@ -40,6 +40,19 @@ export default function Layout({
   currentPage2, handleQuery2, totalPages2,
   newQueryWordCount
 }) {
+  const [randomWords, setRandomWords] = useState([]);
+
+  useEffect(() => {
+    // Fetch random words from the file
+    fetch('/random_words.txt')
+      .then(response => response.text())
+      .then(text => {
+        const words = text.split('\n').filter(word => word.trim().length > 0);
+        setRandomWords(words);
+      })
+      .catch(error => console.error('Error loading random words:', error));
+  }, []);
+
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
       <EuiHeader position="fixed" style={{ 
@@ -91,6 +104,29 @@ export default function Layout({
                     paddingLeft: '32px'
                   }}
                 />
+              </EuiFlexItem>
+              <EuiFlexItem grow={false}>
+                <EuiButton
+                  onClick={() => {
+                    if (randomWords.length > 0) {
+                      const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+                      setSearchTerm(randomWord);
+                    }
+                  }}
+                  iconType="refresh"
+                  size="s"
+                  style={{ 
+                    background: '#f8fafc', 
+                    color: '#1a73e8',
+                    height: '32px',
+                    borderRadius: '8px',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                    border: '1px solid #e2e8f0',
+                    marginRight: '8px'
+                  }}
+                >
+                  Random
+                </EuiButton>
               </EuiFlexItem>
               <EuiFlexItem grow={false}>
                 <EuiButton
@@ -313,16 +349,30 @@ export default function Layout({
                     />
                   </EuiFlexItem>
                   <EuiFlexItem grow={true}>
-                    {typeof newQueryWordCount === 'number' && newQueryWordCount > 0 && (
-                      <EuiBadge color="primary" iconType="tag" size="s" style={{ 
-                        background: '#1a73e8', 
-                        marginRight: 8,
-                        borderRadius: '6px',
-                        color: '#fff'
-                      }}>Number of words: {newQueryWordCount}</EuiBadge>
-                    )}
+                    <EuiFlexGroup gutterSize="s" alignItems="center">
+                      {typeof newQueryWordCount === 'number' && newQueryWordCount > 0 && (
+                        <EuiFlexItem grow={false}>
+                          <EuiBadge color="primary" iconType="tag" size="s" style={{ 
+                            background: '#1a73e8', 
+                            marginRight: 8,
+                            borderRadius: '6px',
+                            color: '#fff'
+                          }}>Number of words: {newQueryWordCount}</EuiBadge>
+                        </EuiFlexItem>
+                      )}
+                      {results2?.isFallback && (
+                        <EuiFlexItem grow={false}>
+                          <EuiBadge color="success" iconType="check" size="s" style={{ 
+                            background: '#34a853', 
+                            marginRight: 8,
+                            borderRadius: '6px',
+                            color: '#fff'
+                          }}>Fallback</EuiBadge>
+                        </EuiFlexItem>
+                      )}
+                    </EuiFlexGroup>
                     {results2?.body?.hits && (
-                      <EuiText size="xs" color="subdued" style={{ margin: 0 }}>
+                      <EuiText size="xs" color="subdued" style={{ margin: '8px 0 0 0' }}>
                         <EuiIcon type="document" size="xs" style={{ marginRight: 2, color: '#1a73e8' }} />
                         Total Results: <strong>{results2.body.hits.total.value}</strong>
                         {results2.body.took && (

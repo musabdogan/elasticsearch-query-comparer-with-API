@@ -10,30 +10,40 @@
             { "term": { "type": 129 } },
             { "terms": { "status": [0, 2] } }
           ],
-          "must": {
-            "dis_max": {
-              "queries": [
-                { "term": { "data.sku": { "value": "{{term}}", "boost": 5 } } },
-                { "term": { "data.model_code": { "value": "{{term}}", "boost": 5 } } },
-                { "match_phrase": { "data.name": { "query": "{{term}}", "boost": 5 } } },
-                { "match_phrase": { "data.short_description": { "query": "{{term}}", "boost": 3 } } },
-                { "match_phrase": { "data.manufacturer_label": { "query": "{{term}}", "boost": 3 } } },
-                { "match_phrase": { "data.product_name.keyword": { "query": "{{term}}", "boost": 3 } } },
-                { "match": { "data.name": { "query": "{{term}}", "operator": "and" } } },
-                { "match": { "data.short_description": { "query": "{{term}}", "operator": "and" } } },
-                { "match": { "data.manufacturer_label": { "query": "{{term}}", "operator": "and" } } },
-                { "match": { "data.product_name.keyword": { "query": "{{term}}", "operator": "and" } } },
-                { "wildcard": { "data.name": { "value": "*{{term}}*", "case_insensitive": true } } },
-                { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*", "case_insensitive": true } } },
-                { "wildcard": { "data.short_description.keyword": { "value": "*{{term}}*", "case_insensitive": true } } },
-                { "wildcard": { "data.sku": { "value": "*{{term}}*", "case_insensitive": true } } },
-                { "wildcard": { "data.model_code": { "value": "*{{term}}*", "case_insensitive": true } } },
-                { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*", "case_insensitive": true } } },
-                { "match": { "data.name": { "query": "{{term}}", "operator": "and", "fuzziness": "auto"}}}
-              ],
-              "tie_breaker": 0.3
-            }
-          }
+          "should": [
+            {
+              "bool": {
+                "must": [
+                  { 
+                    "dis_max": {
+                      "queries": [
+                        { "term": { "data.sku": { "value": "{{term}}", "boost": 5 } } },
+                        { "term": { "data.model_code": { "value": "{{term}}", "boost": 5 } } },
+                        { "match_phrase": { "data.name": { "query": "{{term}}", "boost": 5 } } },
+                        { "match_phrase": { "data.short_description": { "query": "{{term}}", "boost": 3 } } },
+                        { "match_phrase": { "data.manufacturer_label": { "query": "{{term}}", "boost": 3 } } },
+                        { "match_phrase": { "data.product_name.keyword": { "query": "{{term}}", "boost": 3 } } },
+                        { "match": { "data.name": { "query": "{{term}}", "operator": "and" } } },
+                        { "match": { "data.short_description": { "query": "{{term}}", "operator": "and" } } },
+                        { "match": { "data.manufacturer_label": { "query": "{{term}}", "operator": "and" } } },
+                        { "match": { "data.product_name.keyword": { "query": "{{term}}", "operator": "and" } } },
+                        { "wildcard": { "data.name": { "value": "*{{term}}*", "case_insensitive": true } } },
+                        { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*", "case_insensitive": true } } },
+                        { "wildcard": { "data.short_description.keyword": { "value": "*{{term}}*", "case_insensitive": true } } },
+                        { "wildcard": { "data.sku": { "value": "*{{term}}*", "case_insensitive": true } } },
+                        { "wildcard": { "data.model_code": { "value": "*{{term}}*", "case_insensitive": true } } },
+                        { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*", "case_insensitive": true } } },
+                        { "match": { "data.name": { "query": "{{term}}", "operator": "and", "fuzziness": "auto"}}}
+                      ],
+                      "tie_breaker": 0.3
+                    }
+                  }
+                ]
+              }
+            },
+            { "bool": { "must": [ {{#each term_words}} { "wildcard": { "data.name": { "value": "*{{this}}*", "case_insensitive": true } } }{{#unless @last}},{{/unless}} {{/each}} ] } }
+          ],
+          "minimum_should_match": 1
         }
       },
       "functions": [

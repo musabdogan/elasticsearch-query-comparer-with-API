@@ -132,7 +132,7 @@ export default function Home() {
 
     try {
       // Always use the new template endpoint for New Query
-      const dslResponse = await fetch(`/api/dsl?query=query_template&term=${encodeURIComponent(searchTerm.trim())}&size=${size}&from=${from}`);
+      const dslResponse = await fetch(`/api/dsl?query=new_query&term=${encodeURIComponent(searchTerm.trim())}&size=${size}&from=${from}`);
       const { dsl } = await dslResponse.json();
       console.log('Fetched DSL:', dsl);
       if (!dsl) {
@@ -148,9 +148,16 @@ export default function Home() {
         body: JSON.stringify({
           url: esUrl2,
           query: preparedDsl,
+          searchTerm: searchTerm.trim()
         }),
       });
+      console.log('API Request Body:', {
+        url: esUrl2,
+        query: preparedDsl,
+        searchTerm: searchTerm.trim()
+      });
       const data2 = await response2.json();
+      console.log('API Response:', data2);
       setResults2(data2);
     } catch (error) {
       console.error("Search error Query 2:", error);
