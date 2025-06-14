@@ -81,6 +81,16 @@ export default function Layout({
             border: '1px solid #e2e8f0'
           }}>
             <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="center">
+              <EuiFlexItem grow={false} style={{ marginRight: 16 }}>
+                <img 
+                  src="/logo.0e622da5.svg" 
+                  alt="ChefsDeal Logo" 
+                  style={{ 
+                    height: '32px',
+                    width: 'auto'
+                  }} 
+                />
+              </EuiFlexItem>
               <EuiFlexItem grow={false} style={{ width: '300px' }}>
                 <EuiFieldText
                   placeholder="Enter search term..."
