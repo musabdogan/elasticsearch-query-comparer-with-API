@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Elasticsearch</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="#00BFB3" cx="16" cy="16" r="16"/>
+        <path d="M23.189 11.02c-.276-.276-.724-.276-1 0l-4.5 4.5c-.276.276-.276.724 0 1l4.5 4.5c.276.276.724.276 1 0 .276-.276.276-.724 0-1l-4-4 4-4c.276-.276.276-.724 0-1z" fill="#FFFFFF"/>
+        <path d="M8.811 11.02c.276-.276.724-.276 1 0l4.5 4.5c.276.276.276.724 0 1l-4.5 4.5c-.276.276-.724.276-1 0-.276-.276-.276-.724 0-1l4-4-4-4c-.276-.276-.276-.724 0-1z" fill="#FFFFFF"/>
+        <path d="M16 8.5c.276 0 .5.224.5.5v14c0 .276-.224.5-.5.5s-.5-.224-.5-.5V9c0-.276.224-.5.5-.5z" fill="#FFFFFF"/>
+    </g>
+</svg> 
