@@ -83,7 +83,7 @@ export default function Layout({
             <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="center">
               <EuiFlexItem grow={false} style={{ marginRight: 16 }}>
                 <img 
-                  src="/logo.0e622da5.svg" 
+                  src="https://www.chefsdeal.com/_next/static/media/logo.0e622da5.svg" 
                   alt="ChefsDeal Logo" 
                   style={{ 
                     height: '32px',
