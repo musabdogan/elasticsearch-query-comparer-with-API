@@ -23,12 +23,12 @@
                 { "match": { "data.short_description": { "query": "{{term}}", "operator": "and" } } },
                 { "match": { "data.manufacturer_label": { "query": "{{term}}", "operator": "and" } } },
                 { "match": { "data.product_name.keyword": { "query": "{{term}}", "operator": "and" } } },
-                { "wildcard": { "data.name": { "value": "*{{term}}*" } } },
-                { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*" } } },
-                { "wildcard": { "data.short_description.keyword": { "value": "*{{term}}*" } } },
-                { "wildcard": { "data.sku": { "value": "*{{term}}*" } } },
-                { "wildcard": { "data.model_code": { "value": "*{{term}}*" } } },
-                { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*" } } },
+                { "wildcard": { "data.name": { "value": "*{{term}}*", "case_insensitive": true } } },
+                { "wildcard": { "data.manufacturer_label": { "value": "*{{term}}*", "case_insensitive": true } } },
+                { "wildcard": { "data.short_description.keyword": { "value": "*{{term}}*", "case_insensitive": true } } },
+                { "wildcard": { "data.sku": { "value": "*{{term}}*", "case_insensitive": true } } },
+                { "wildcard": { "data.model_code": { "value": "*{{term}}*", "case_insensitive": true } } },
+                { "wildcard": { "data.product_name.keyword": { "value": "*{{term}}*", "case_insensitive": true } } },
                 { "match": { "data.name": { "query": "{{term}}", "operator": "and", "fuzziness": "auto"}}}
               ],
               "tie_breaker": 0.3
