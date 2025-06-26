@@ -242,19 +242,36 @@ export default function Layout({
                                   onClick={() => setPopoverOpen1(popoverOpen1 === index ? null : index)}
                                 >
                                   <EuiCard
-                                    title={
-                                      <div style={{ position: 'relative' }}>
-                                        <div style={{ 
-                                          position: 'absolute',
-                                          top: 0,
-                                          left: 0,
-                                          right: 0,
-                                          bottom: 0,
-                                          zIndex: 1
-                                        }} title={hit._source.data.model_code || 'Model code not found'} />
-                                        {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                      </div>
-                                    }
+                                    title={(() => {
+                                      // Prefer data.name, then data.product_name
+                                      const name = hit._source?.data?.name;
+                                      const productName = hit._source?.data?.product_name;
+                                      // Check for highlight in data.name or data.product_name
+                                      if (hit.highlight) {
+                                        if (hit.highlight['data.name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.name'][0]
+                                              }}
+                                            />
+                                          );
+                                        } else if (hit.highlight['data.product_name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.product_name'][0]
+                                              }}
+                                            />
+                                          );
+                                        }
+                                      }
+                                      // Fallback to plain name or product_name
+                                      if (name) {
+                                        return `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ${name}`;
+                                      }
+                                      return `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ${productName}`;
+                                    })()}
                                     description={null}
                                     paddingSize="s"
                                     textAlign="left"
@@ -294,19 +311,36 @@ export default function Layout({
                                   onClick={() => setPopoverOpen1(popoverOpen1 === index ? null : index)}
                                 >
                                   <EuiCard
-                                    title={
-                                      <div style={{ position: 'relative' }}>
-                                        <div style={{ 
-                                          position: 'absolute',
-                                          top: 0,
-                                          left: 0,
-                                          right: 0,
-                                          bottom: 0,
-                                          zIndex: 1
-                                        }} title={hit._source.data.model_code || 'Model code not found'} />
-                                        {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                      </div>
-                                    }
+                                    title={(() => {
+                                      // Prefer data.name, then data.product_name
+                                      const name = hit._source?.data?.name;
+                                      const productName = hit._source?.data?.product_name;
+                                      // Check for highlight in data.name or data.product_name
+                                      if (hit.highlight) {
+                                        if (hit.highlight['data.name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.name'][0]
+                                              }}
+                                            />
+                                          );
+                                        } else if (hit.highlight['data.product_name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.product_name'][0]
+                                              }}
+                                            />
+                                          );
+                                        }
+                                      }
+                                      // Fallback to plain name or product_name
+                                      if (name) {
+                                        return `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ${name}`;
+                                      }
+                                      return `#${(typeof currentPage1 !== 'undefined' ? currentPage1 : 0) * ITEMS_PER_PAGE + index + 1}: ${productName}`;
+                                    })()}
                                     description={null}
                                     paddingSize="s"
                                     textAlign="left"
@@ -453,19 +487,36 @@ export default function Layout({
                                   onClick={() => setPopoverOpen2(popoverOpen2 === index ? null : index)}
                                 >
                                   <EuiCard
-                                    title={
-                                      <div style={{ position: 'relative' }}>
-                                        <div style={{ 
-                                          position: 'absolute',
-                                          top: 0,
-                                          left: 0,
-                                          right: 0,
-                                          bottom: 0,
-                                          zIndex: 1
-                                        }} title={hit._source.data.model_code || 'Model code not found'} />
-                                        {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                      </div>
-                                    }
+                                    title={(() => {
+                                      // Prefer data.name, then data.product_name
+                                      const name = hit._source?.data?.name;
+                                      const productName = hit._source?.data?.product_name;
+                                      // Check for highlight in data.name or data.product_name
+                                      if (hit.highlight) {
+                                        if (hit.highlight['data.name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.name'][0]
+                                              }}
+                                            />
+                                          );
+                                        } else if (hit.highlight['data.product_name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.product_name'][0]
+                                              }}
+                                            />
+                                          );
+                                        }
+                                      }
+                                      // Fallback to plain name or product_name
+                                      if (name) {
+                                        return `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ${name}`;
+                                      }
+                                      return `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ${productName}`;
+                                    })()}
                                     description={null}
                                     paddingSize="s"
                                     textAlign="left"
@@ -505,19 +556,36 @@ export default function Layout({
                                   onClick={() => setPopoverOpen2(popoverOpen2 === index ? null : index)}
                                 >
                                   <EuiCard
-                                    title={
-                                      <div style={{ position: 'relative' }}>
-                                        <div style={{ 
-                                          position: 'absolute',
-                                          top: 0,
-                                          left: 0,
-                                          right: 0,
-                                          bottom: 0,
-                                          zIndex: 1
-                                        }} title={hit._source.data.model_code || 'Model code not found'} />
-                                        {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                      </div>
-                                    }
+                                    title={(() => {
+                                      // Prefer data.name, then data.product_name
+                                      const name = hit._source?.data?.name;
+                                      const productName = hit._source?.data?.product_name;
+                                      // Check for highlight in data.name or data.product_name
+                                      if (hit.highlight) {
+                                        if (hit.highlight['data.name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.name'][0]
+                                              }}
+                                            />
+                                          );
+                                        } else if (hit.highlight['data.product_name']) {
+                                          return (
+                                            <span
+                                              dangerouslySetInnerHTML={{
+                                                __html: `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ` + hit.highlight['data.product_name'][0]
+                                              }}
+                                            />
+                                          );
+                                        }
+                                      }
+                                      // Fallback to plain name or product_name
+                                      if (name) {
+                                        return `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ${name}`;
+                                      }
+                                      return `#${(typeof currentPage2 !== 'undefined' ? currentPage2 : 0) * ITEMS_PER_PAGE + index + 1}: ${productName}`;
+                                    })()}
                                     description={null}
                                     paddingSize="s"
                                     textAlign="left"
