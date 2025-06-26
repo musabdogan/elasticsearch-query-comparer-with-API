@@ -23,6 +23,7 @@ import {
   EuiIcon,
   EuiHorizontalRule,
   EuiToolTip,
+  EuiPopover,
 } from '@elastic/eui';
 
 const ITEMS_PER_PAGE = 10;
@@ -41,6 +42,9 @@ export default function Layout({
   newQueryWordCount
 }) {
   const [randomWords, setRandomWords] = useState([]);
+  // Popover state for both result lists
+  const [popoverOpen1, setPopoverOpen1] = useState(null); // index of open popover for result 1
+  const [popoverOpen2, setPopoverOpen2] = useState(null); // index of open popover for result 2
 
   useEffect(() => {
     // Fetch random words from the file
@@ -229,68 +233,104 @@ export default function Layout({
                       <EuiFlexItem>
                         {result.body.hits.hits.map((hit, index) => (
                           (index < 5) && (
-                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
-                              <EuiCard
-                                key={hit._id}
-                                title={
-                                  <div style={{ position: 'relative' }}>
-                                    <div style={{ 
-                                      position: 'absolute',
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model code not found'} />
-                                    {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                  </div>
-                                }
-                                description={null}
-                                paddingSize="s"
-                                textAlign="left"
-                                style={{ 
-                                  marginBottom: 4, 
-                                  border: '1px solid #e2e8f0',
-                                  borderRadius: '8px',
-                                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                                  cursor: 'help'
-                                }}
-                              />
-                            </div>
+                            <EuiPopover
+                              key={hit._id}
+                              button={
+                                <div
+                                  title={hit._source.data.model_code || 'Model code not found'}
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => setPopoverOpen1(popoverOpen1 === index ? null : index)}
+                                >
+                                  <EuiCard
+                                    title={
+                                      <div style={{ position: 'relative' }}>
+                                        <div style={{ 
+                                          position: 'absolute',
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 0,
+                                          zIndex: 1
+                                        }} title={hit._source.data.model_code || 'Model code not found'} />
+                                        {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
+                                      </div>
+                                    }
+                                    description={null}
+                                    paddingSize="s"
+                                    textAlign="left"
+                                    style={{ 
+                                      marginBottom: 4, 
+                                      border: '1px solid #e2e8f0',
+                                      borderRadius: '8px',
+                                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                      cursor: 'pointer'
+                                    }}
+                                  />
+                                </div>
+                              }
+                              isOpen={popoverOpen1 === index}
+                              closePopover={() => setPopoverOpen1(null)}
+                              anchorPosition="downCenter"
+                              panelPaddingSize="m"
+                            >
+                              <EuiText size="s">
+                                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+                                  {JSON.stringify(hit._source, null, 2)}
+                                </pre>
+                              </EuiText>
+                            </EuiPopover>
                           )
                         ))}
                       </EuiFlexItem>
                       <EuiFlexItem>
                         {result.body.hits.hits.map((hit, index) => (
                           (index >= 5 && index < 10) && (
-                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
-                              <EuiCard
-                                key={hit._id}
-                                title={
-                                  <div style={{ position: 'relative' }}>
-                                    <div style={{ 
-                                      position: 'absolute',
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model code not found'} />
-                                    {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                  </div>
-                                }
-                                description={null}
-                                paddingSize="s"
-                                textAlign="left"
-                                style={{ 
-                                  marginBottom: 4, 
-                                  border: '1px solid #e2e8f0',
-                                  borderRadius: '8px',
-                                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                                  cursor: 'help'
-                                }}
-                              />
-                            </div>
+                            <EuiPopover
+                              key={hit._id}
+                              button={
+                                <div
+                                  title={hit._source.data.model_code || 'Model code not found'}
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => setPopoverOpen1(popoverOpen1 === index ? null : index)}
+                                >
+                                  <EuiCard
+                                    title={
+                                      <div style={{ position: 'relative' }}>
+                                        <div style={{ 
+                                          position: 'absolute',
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 0,
+                                          zIndex: 1
+                                        }} title={hit._source.data.model_code || 'Model code not found'} />
+                                        {`#${currentPage1 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
+                                      </div>
+                                    }
+                                    description={null}
+                                    paddingSize="s"
+                                    textAlign="left"
+                                    style={{ 
+                                      marginBottom: 4, 
+                                      border: '1px solid #e2e8f0',
+                                      borderRadius: '8px',
+                                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                      cursor: 'pointer'
+                                    }}
+                                  />
+                                </div>
+                              }
+                              isOpen={popoverOpen1 === index}
+                              closePopover={() => setPopoverOpen1(null)}
+                              anchorPosition="downCenter"
+                              panelPaddingSize="m"
+                            >
+                              <EuiText size="s">
+                                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+                                  {JSON.stringify(hit._source, null, 2)}
+                                </pre>
+                              </EuiText>
+                            </EuiPopover>
                           )
                         ))}
                       </EuiFlexItem>
@@ -404,68 +444,104 @@ export default function Layout({
                       <EuiFlexItem>
                         {results2.body.hits.hits.map((hit, index) => (
                           (index < 5) && (
-                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
-                              <EuiCard
-                                key={hit._id}
-                                title={
-                                  <div style={{ position: 'relative' }}>
-                                    <div style={{ 
-                                      position: 'absolute',
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model code not found'} />
-                                    {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                  </div>
-                                }
-                                description={null}
-                                paddingSize="s"
-                                textAlign="left"
-                                style={{ 
-                                  marginBottom: 4, 
-                                  border: '1px solid #e2e8f0',
-                                  borderRadius: '8px',
-                                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                                  cursor: 'help'
-                                }}
-                              />
-                            </div>
+                            <EuiPopover
+                              key={hit._id}
+                              button={
+                                <div
+                                  title={hit._source.data.model_code || 'Model code not found'}
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => setPopoverOpen2(popoverOpen2 === index ? null : index)}
+                                >
+                                  <EuiCard
+                                    title={
+                                      <div style={{ position: 'relative' }}>
+                                        <div style={{ 
+                                          position: 'absolute',
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 0,
+                                          zIndex: 1
+                                        }} title={hit._source.data.model_code || 'Model code not found'} />
+                                        {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
+                                      </div>
+                                    }
+                                    description={null}
+                                    paddingSize="s"
+                                    textAlign="left"
+                                    style={{ 
+                                      marginBottom: 4, 
+                                      border: '1px solid #e2e8f0',
+                                      borderRadius: '8px',
+                                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                      cursor: 'pointer'
+                                    }}
+                                  />
+                                </div>
+                              }
+                              isOpen={popoverOpen2 === index}
+                              closePopover={() => setPopoverOpen2(null)}
+                              anchorPosition="downCenter"
+                              panelPaddingSize="m"
+                            >
+                              <EuiText size="s">
+                                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+                                  {JSON.stringify(hit._source, null, 2)}
+                                </pre>
+                              </EuiText>
+                            </EuiPopover>
                           )
                         ))}
                       </EuiFlexItem>
                       <EuiFlexItem>
                         {results2.body.hits.hits.map((hit, index) => (
                           (index >= 5 && index < 10) && (
-                            <div title={hit._source.data.model_code || 'Model code not found'} style={{ cursor: 'help' }}>
-                              <EuiCard
-                                key={hit._id}
-                                title={
-                                  <div style={{ position: 'relative' }}>
-                                    <div style={{ 
-                                      position: 'absolute',
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      zIndex: 1
-                                    }} title={hit._source.data.model_code || 'Model code not found'} />
-                                    {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
-                                  </div>
-                                }
-                                description={null}
-                                paddingSize="s"
-                                textAlign="left"
-                                style={{ 
-                                  marginBottom: 4, 
-                                  border: '1px solid #e2e8f0',
-                                  borderRadius: '8px',
-                                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                                  cursor: 'help'
-                                }}
-                              />
-                            </div>
+                            <EuiPopover
+                              key={hit._id}
+                              button={
+                                <div
+                                  title={hit._source.data.model_code || 'Model code not found'}
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => setPopoverOpen2(popoverOpen2 === index ? null : index)}
+                                >
+                                  <EuiCard
+                                    title={
+                                      <div style={{ position: 'relative' }}>
+                                        <div style={{ 
+                                          position: 'absolute',
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 0,
+                                          zIndex: 1
+                                        }} title={hit._source.data.model_code || 'Model code not found'} />
+                                        {`#${currentPage2 * ITEMS_PER_PAGE + index + 1}: ${hit._source.data.product_name}`}
+                                      </div>
+                                    }
+                                    description={null}
+                                    paddingSize="s"
+                                    textAlign="left"
+                                    style={{ 
+                                      marginBottom: 4, 
+                                      border: '1px solid #e2e8f0',
+                                      borderRadius: '8px',
+                                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                      cursor: 'pointer'
+                                    }}
+                                  />
+                                </div>
+                              }
+                              isOpen={popoverOpen2 === index}
+                              closePopover={() => setPopoverOpen2(null)}
+                              anchorPosition="downCenter"
+                              panelPaddingSize="m"
+                            >
+                              <EuiText size="s">
+                                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+                                  {JSON.stringify(hit._source, null, 2)}
+                                </pre>
+                              </EuiText>
+                            </EuiPopover>
                           )
                         ))}
                       </EuiFlexItem>

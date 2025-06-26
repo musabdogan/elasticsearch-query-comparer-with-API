@@ -46,7 +46,7 @@
       "score_mode": "multiply"
     }
   },
-  "_source": ["data.name", "data.sku", "data.model_code", "data.z_product_score_global", "data.short_description", "data.product_name", "data.manufacturer_label", "data.product_name"],
+  "_source": ["data.name", "data.sku", "data.model_code", "data.z_product_score_global", "data.product_name", "data.manufacturer_label", "data.product_name"],
   "size": {{size}},
   "from": {{from}}
 } 
