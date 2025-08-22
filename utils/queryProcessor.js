@@ -1,4 +1,4 @@
-export function processQueryTemplate(template, term, size = 10, from = 0) {
+export function processQueryTemplate(template, term, size = 10, from = 0, displayField = 'data.product_name') {
   if (!template) {
     throw new Error('Template is required');
   }
@@ -27,7 +27,12 @@ export function processQueryTemplate(template, term, size = 10, from = 0) {
       wordQueries
     );
     
-    return JSON.parse(query);
+    // Parse the query
+    let queryObj = JSON.parse(query);
+    
+
+    
+    return queryObj;
   } catch (error) {
     console.error('Error processing template:', error);
     throw new Error(`Failed to process template: ${error.message}`);

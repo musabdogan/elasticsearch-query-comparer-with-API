@@ -1,4 +1,4 @@
-import { Client } from '@elastic/elasticsearch';
+import { Client } from '@opensearch-project/opensearch';
 import fs from 'fs';
 import path from 'path';
 import Handlebars from 'handlebars';
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Query object is required in the request body.' });
     }
 
-    // URL'den index pattern'i çıkar
+    // Extract index pattern from URL
     const baseUrl = url.split('/').slice(0, -1).join('/');
     const urlIndexPattern = url.split('/').pop();
 
@@ -26,12 +26,8 @@ export default async function handler(req, res) {
         password: password,
       },
       maxRetries: 10,
-      requestTimeout: 10000, // 10 saniye timeout
-      sniffOnStart: true,
+      requestTimeout: 10000, // 10 second timeout
       ssl: {
-        rejectUnauthorized: false
-      },
-      tls: {
         rejectUnauthorized: false
       }
     });
@@ -46,8 +42,6 @@ export default async function handler(req, res) {
     delete searchBody.from;
     
     // Perform the search using the index pattern from URL if available
-    console.log('=== İLK SORGU BAŞLIYOR ===');
-    console.log('Sorgu:', JSON.stringify(searchBody, null, 2));
     let response;
     try {
       response = await client.search({
@@ -56,86 +50,59 @@ export default async function handler(req, res) {
         size: size, 
         from: from 
       });
-      console.log('İlk sorgu sonucu:', response.body.hits.total.value, 'sonuç');
+
     } catch (error) {
-      console.error('İlk sorgu hatası:', error);
-      throw error;
-    }
-
-    // Eğer sonuç bulunamazsa ve searchTerm varsa, basit bir match sorgusu dene
-    if (response.body.hits.total.value === 0 && searchTerm) {
-      console.log('\n=== FALLBACK SORGUSU BAŞLIYOR ===');
-      console.log('SearchTerm:', searchTerm);
+      console.error('First query error:', error);
+      // Create a more detailed error message
+      let errorMessage = 'Elasticsearch query failed';
+      let errorDetails = error.message;
       
-      try {
-        // Fallback query template'ini oku ve derle
-        const fallbackTemplate = fs.readFileSync(path.join(process.cwd(), 'new_query_fallback.txt'), 'utf8');
-        console.log('Fallback template dosyası okundu');
-        
-        const compiledFallbackQuery = Handlebars.compile(fallbackTemplate);
-        
-        // Fallback query'yi hazırla
-        const fallbackQuery = JSON.parse(compiledFallbackQuery({
-          term: searchTerm,
-          size: size,
-          from: from,
-          term_words: searchTerm.split(/\s+/)
-        }));
-
-        console.log('Fallback sorgu:', JSON.stringify(fallbackQuery, null, 2));
-
-        // Yeni bir client oluştur
-        const fallbackClient = new Client({
-          node: baseUrl,
-          auth: {
-            username: username,
-            password: password,
-          },
-          maxRetries: 10,
-          requestTimeout: 10000,
-          sniffOnStart: true,
-          ssl: {
-            rejectUnauthorized: false
-          },
-          tls: {
-            rejectUnauthorized: false
-          }
-        });
-
-        const fallbackResponse = await fallbackClient.search({
-          index: urlIndexPattern || index,
-          body: fallbackQuery,
-          size: size,
-          from: from
-        });
-
-        console.log('Fallback sorgu sonucu:', fallbackResponse.body.hits.total.value, 'sonuç');
-
-        if (fallbackResponse.body.hits.total.value > 0) {
-          console.log('Fallback sorgu başarılı, sonuçlar dönüyor');
-          return res.status(200).json({
-            ...fallbackResponse,
-            isFallback: true
-          });
-        } else {
-          console.log('Fallback sorgu da sonuç bulamadı');
-        }
-      } catch (fallbackError) {
-        console.error('Fallback sorgu hatası:', fallbackError);
-        console.error('Hata detayı:', fallbackError.message);
-        throw fallbackError;
+      if (error.name === 'TimeoutError') {
+        errorMessage = 'Request timed out';
+        errorDetails = 'The Elasticsearch request took too long to complete. Please check your connection or try again.';
+      } else if (error.name === 'ConnectionError') {
+        errorMessage = 'Connection failed';
+        errorDetails = 'Unable to connect to Elasticsearch. Please check the URL and credentials.';
+      } else if (error.statusCode === 401) {
+        errorMessage = 'Authentication failed';
+        errorDetails = 'Invalid username or password. Please check your credentials.';
+      } else if (error.statusCode === 403) {
+        errorMessage = 'Access denied';
+        errorDetails = 'You do not have permission to access this index.';
+      } else if (error.statusCode === 404) {
+        errorMessage = 'Index not found';
+        errorDetails = 'The specified index does not exist.';
+      } else if (error.statusCode === 500) {
+        errorMessage = 'Elasticsearch server error';
+        errorDetails = 'Internal server error in Elasticsearch. Please try again later.';
       }
+      
+      throw {
+        message: errorMessage,
+        details: errorDetails,
+        originalError: error
+      };
     }
+
+    // Fallback logic removed - handled in frontend
     
     // Send successful response
-    console.log('\n=== SONUÇ ===');
-    console.log('İlk sorgu sonuçları dönüyor');
     res.status(200).json(response);
   } catch (error) {
-    console.error('Elasticsearch hatası:', error);
-    res.status(500).json({ 
-      error: 'Elasticsearch sorgusu çalıştırılırken hata oluştu',
-      details: error.message 
-    });
+    console.error('Elasticsearch error:', error);
+    
+    // Check if this is our custom error object
+    if (error.message && error.details) {
+      res.status(500).json({ 
+        error: error.message,
+        details: error.details
+      });
+    } else {
+      // Fallback for other errors
+      res.status(500).json({ 
+        error: 'Elasticsearch query failed',
+        details: error.message || 'An unexpected error occurred'
+      });
+    }
   }
 } 

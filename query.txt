@@ -1,0 +1,49 @@
+{
+  "track_total_hits": true,
+  "from": 0,
+  "size": 20,
+  "query": {
+    "function_score": {
+      "query": {
+        "multi_match": {
+          "query": "{{term}}",
+          "type": "most_fields",
+          "fields": [
+            "agent",
+            "contributor",
+            "culturalContext",
+            "date",
+            "dateModified",
+            "description",
+            "identifier",
+            "inscription",
+            "language",
+            "location",
+            "material",
+            "measurements",
+            "mediaAltText",
+            "media",
+            "provenance",
+            "relation",
+            "rights",
+            "source",
+            "stylePeriod",
+            "subject",
+            "tags",
+            "technique",
+            "title^50",
+            "worktype"
+          ],
+          "operator": "and"
+        }
+      },
+      "functions": [
+        {
+          "filter": { "match_all": {} },
+          "weight": 1.0
+        }
+      ],
+      "boost_mode": "sum"
+    }
+  }
+}

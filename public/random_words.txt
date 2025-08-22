@@ -1,111 +1,427 @@
-refrigerator
-dishwasher
-oven
-microwave
-washer
-dryer
-stove
-freezer
-cooktop
-range
-hood
-wine cooler
-beverage
-coffee maker
-vacuum
-air purifier
-dehumidifier
-water filter
-garbage disposal
-trash compactor
-blender
-mixer
-toaster
-food processor
-kettle
+addendums
+qu'ran
+antitheses
+delighted
+colour
+alkekengi flower
+cherry
+bacterium
+antitheses
+châteaus
+winter cherry
+
+painting
+sculpture
+ceramic
+bronze
+sword
+fish
+cat
+bear
+tiger
+sunset
+snow
+church
+street
+boots
+mask
+shell
+portrait
+landscape
+vase
+pottery
+jewelry
+furniture
+textile
+print
+drawing
+photograph
+statue
+monument
+temple
+castle
+bridge
+tower
+garden
+fountain
+clock
+mirror
+candle
+book
+manuscript
+map
+coin
+medal
+flag
+banner
+crown
+throne
+chair
+table
+bed
+cabinet
+chest
+box
+bottle
+cup
+plate
+bowl
+spoon
+knife
+fork
+lamp
+candle
+torch
+fire
+water
+earth
+air
+wind
+rain
+storm
+cloud
+mountain
+river
+sea
+ocean
+forest
+tree
+flower
+bird
+horse
+dog
+lion
+eagle
+owl
+dragon
+phoenix
+angel
+demon
+god
+goddess
+king
+queen
+prince
+princess
+knight
+warrior
+soldier
+archer
+hunter
+farmer
+merchant
+priest
+monk
+nun
+saint
+hero
+villain
+monster
+ghost
+spirit
+soul
+heart
+eye
+hand
+foot
+head
+face
+hair
+beard
+mustache
+smile
+tear
+laugh
+cry
+dance
+sing
+play
+music
+song
+poem
+story
+tale
+legend
+myth
+fable
+dream
+nightmare
+hope
+fear
+love
+hate
+joy
+sadness
+anger
+peace
+war
+victory
+defeat
+life
+death
+birth
+marriage
+funeral
+celebration
+festival
+ceremony
+ritual
+prayer
+blessing
+curse
+magic
+spell
+charm
+treasure
+gold
+silver
+bronze
 iron
-fan
-grinder
-juicer
-ice maker
-water dispenser
-wine fridge
-beer fridge
-mini fridge
-compact refrigerator
-side by side refrigerator
-french door refrigerator
-bottom freezer refrigerator
-top freezer refrigerator
-counter depth refrigerator
-smart refrigerator
-gas range
-electric range
-induction cooktop
-gas cooktop
-electric cooktop
-double oven
-wall oven
-convection oven
-steam oven
-microwave oven
-toaster oven
-air fryer
-pressure cooker
-slow cooker
-rice cooker
-bread maker
-pasta maker
-waffle maker
-panini press
-grill
-griddle
-deep fryer
-food dehydrator
-meat grinder
-stand mixer
-hand mixer
-immersion blender
-food chopper
-spice grinder
-coffee grinder
-espresso machine
-cappuccino maker
-tea maker
-water boiler
-wine chiller
-beer dispenser
-soda maker
-ice cream maker
-yogurt maker
-popcorn maker
-cotton candy maker
-chocolate fountain
-fondue set
-hot plate
-warming drawer
-warming tray
-warming cabinet
-warming cart
-warming station
-warming unit
-warming system
-warming solution
-warming equipment
-warming device
-warming mug
-atosa
-blakeslee
-glass door refrigerator
-dishwasher
-ice machine
-blakeslee dishwasher
-atosa fryer
-atosa freez
-southbend s36
-true milk cooler
-ATFS40
-T49
-TRU-T-49-HC
-blakeslee dishwashes
-atosa fry 
+steel
+copper
+tin
+lead
+marble
+granite
+limestone
+sandstone
+clay
+wood
+leather
+silk
+wool
+cotton
+linen
+velvet
+satin
+lace
+embroidery
+weaving
+knitting
+sewing
+dyeing
+painting
+drawing
+carving
+engraving
+etching
+printing
+casting
+forging
+molding
+shaping
+cutting
+polishing
+gilding
+enameling
+inlaying
+镶嵌
+jade
+pearl
+diamond
+ruby
+emerald
+sapphire
+opal
+amber
+coral
+ivory
+ebony
+mahogany
+oak
+pine
+cedar
+bamboo
+reed
+straw
+feather
+bone
+horn
+antler
+tusk
+claw
+fang
+scale
+wing
+tail
+fin
+gill
+beak
+paw
+hoof
+mane
+fur
+feather
+plume
+quill
+spine
+thorn
+leaf
+petal
+stem
+root
+seed
+fruit
+berry
+nut
+grain
+wheat
+rice
+corn
+barley
+oats
+rye
+millet
+sorghum
+bean
+pea
+lentil
+chickpea
+soybean
+peanut
+almond
+walnut
+hazelnut
+chestnut
+pistachio
+macadamia
+pecan
+cashew
+pineapple
+banana
+apple
+orange
+lemon
+lime
+grape
+cherry
+peach
+plum
+apricot
+nectarine
+mango
+papaya
+guava
+fig
+date
+prune
+raisin
+currant
+cranberry
+blueberry
+strawberry
+raspberry
+blackberry
+mulberry
+elderberry
+gooseberry
+crabapple
+quince
+medlar
+loquat
+persimmon
+pomegranate
+mulberry
+sycamore
+maple
+birch
+alder
+aspen
+poplar
+willow
+elm
+ash
+beech
+chestnut
+walnut
+hickory
+butternut
+pecan
+hazelnut
+filbert
+almond
+peach
+apricot
+cherry
+plum
+prune
+damson
+sloe
+bullace
+greengage
+mirabelle
+myrobalan
+cherry plum
+sweet cherry
+sour cherry
+black cherry
+wild cherry
+bird cherry
+pin cherry
+chokecherry
+sand cherry
+bush cherry
+ground cherry
+cape gooseberry
+tomatillo
+physalis
+goldenberry
+inca berry
+peruvian groundcherry
+strawberry tomato
+wild tomatillo
+mexican husk tomato
+jamberry
+poha berry
+poha
+cape gooseberry
+ground cherry
+husk tomato
+chinese lantern
+japanese lantern
+winter cherry
+bladder cherry
+alkekengi
+physalis alkekengi
+chinese lantern plant
+japanese lantern plant
+winter cherry plant
+bladder cherry plant
+alkekengi plant
+physalis alkekengi plant
+chinese lantern flower
+japanese lantern flower
+winter cherry flower
+bladder cherry flower
+alkekengi flower
+physalis alkekengi flower
+chinese lantern fruit
+japanese lantern fruit
+winter cherry fruit
+bladder cherry fruit
+alkekengi fruit
+physalis alkekengi fruit
+chinese lantern seed
+japanese lantern seed
+winter cherry seed
+bladder cherry seed
+alkekengi seed
+physalis alkekengi seed
+chinese lantern leaf
+japanese lantern leaf
+winter cherry leaf
+bladder cherry leaf
+alkekengi leaf
+physalis alkekengi leaf
+chinese lantern stem
+japanese lantern stem
+winter cherry stem
+bladder cherry stem
+alkekengi stem
+physalis alkekengi stem
+chinese lantern root
+japanese lantern root
+winter cherry root
+bladder cherry root
+alkekengi root
+physalis alkekengi root 

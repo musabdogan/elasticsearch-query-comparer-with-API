@@ -1,1 +1,14 @@
 em { background: #fffbe6; color: #d48806; font-style: normal; font-weight: bold; padding: 0 2px; border-radius: 2px; }
+/* Vertically center text in EUI text fields */
+.center-input {
+  height: 32px !important;
+  line-height: 32px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.center-input input {
+  height: 32px !important;
+  line-height: 32px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
