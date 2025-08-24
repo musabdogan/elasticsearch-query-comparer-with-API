@@ -39,9 +39,9 @@ export default function Home() {
   const router = useRouter();
   const [awsApiUrl, setAwsApiUrl] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('awsApiUrl') || 'Your Query API URL';
+      return localStorage.getItem('awsApiUrl') || '';
     }
-    return 'Your Query API URL';
+    return '';
   });
   const [esUrl1, setEsUrl1] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -51,9 +51,9 @@ export default function Home() {
   });
   const [esUrl2, setEsUrl2] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('esUrl2') || 'https://localhost:9200/new_index_name';
+      return localStorage.getItem('esUrl2') || '';
     }
-    return 'https://localhost:9200/new_index_name';
+    return '';
   });
   // Security: keep credentials in memory only (do not persist)
   const [esUsername2, setEsUsername2] = useState('');
@@ -104,9 +104,21 @@ export default function Home() {
   // Save only non-sensitive values to localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('awsApiUrl', awsApiUrl);
-      localStorage.setItem('esUrl1', esUrl1);
-      localStorage.setItem('esUrl2', esUrl2);
+      if (awsApiUrl.trim()) {
+        localStorage.setItem('awsApiUrl', awsApiUrl);
+      } else {
+        localStorage.removeItem('awsApiUrl');
+      }
+      if (esUrl1.trim()) {
+        localStorage.setItem('esUrl1', esUrl1);
+      } else {
+        localStorage.removeItem('esUrl1');
+      }
+      if (esUrl2.trim()) {
+        localStorage.setItem('esUrl2', esUrl2);
+      } else {
+        localStorage.removeItem('esUrl2');
+      }
       localStorage.setItem('embeddingsEnabled', embeddingsEnabled.toString());
     }
   }, [awsApiUrl, esUrl1, esUrl2, embeddingsEnabled]);
