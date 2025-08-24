@@ -21,6 +21,7 @@ const ResultTable = ({
   onPageChange,
   itemsPerPage,
   displayField,
+  selectedFields = ['title','agent','date'],
   loading,
   onPopoverToggle,
   popoverOpen,
@@ -161,10 +162,11 @@ const ResultTable = ({
                                   );
                                 }
 
-                                const titleStr = String(getField(hit._source, 'title', 'No title'));
-                                const agentStr = String(getField(hit._source, 'agent', ''));
-                                const dateStr = String(getField(hit._source, 'date', ''));
-
+                                const values = (Array.isArray(selectedFields) && selectedFields.length > 0 ? selectedFields : ['title','agent','date'])
+                                  .map((fieldName) => String(getField(hit._source, fieldName, '')))
+                                  .filter(Boolean);
+                                const firstLineVal = values.length > 0 ? values[0] : 'No title';
+                                const rest = values.slice(1);
                                 return (
                                   <EuiText size="s">
                                     <span style={{ color: '#64748b' }}>#{(typeof currentPage !== 'undefined' ? currentPage : 0) * itemsPerPage + index + 1}:</span>{' '}
@@ -176,14 +178,11 @@ const ResultTable = ({
                                         overflow: 'hidden'
                                       }}
                                     >
-                                      {titleStr}
+                                      {firstLineVal}
                                     </strong>
-                                    {agentStr && (
-                                      <div style={{ color: '#475569' }}>{agentStr}</div>
-                                    )}
-                                    {dateStr && (
-                                      <div style={{ color: '#475569' }}>{dateStr}</div>
-                                    )}
+                                    {rest.map((v, i) => (
+                                      <div key={i} style={{ color: '#475569' }}>{v}</div>
+                                    ))}
                                   </EuiText>
                                 );
                               } catch (error) {
@@ -256,10 +255,11 @@ const ResultTable = ({
                                   );
                                 }
 
-                                const titleStr = String(getField(hit._source, 'title', 'No title'));
-                                const agentStr = String(getField(hit._source, 'agent', ''));
-                                const dateStr = String(getField(hit._source, 'date', ''));
-
+                                const values = (Array.isArray(selectedFields) && selectedFields.length > 0 ? selectedFields : ['title','agent','date'])
+                                  .map((fieldName) => String(getField(hit._source, fieldName, '')))
+                                  .filter(Boolean);
+                                const firstLineVal = values.length > 0 ? values[0] : 'No title';
+                                const rest = values.slice(1);
                                 return (
                                   <EuiText size="s">
                                     <span style={{ color: '#64748b' }}>#{(typeof currentPage !== 'undefined' ? currentPage : 0) * itemsPerPage + index + 1}:</span>{' '}
@@ -271,14 +271,11 @@ const ResultTable = ({
                                         overflow: 'hidden'
                                       }}
                                     >
-                                      {titleStr}
+                                      {firstLineVal}
                                     </strong>
-                                    {agentStr && (
-                                      <div style={{ color: '#475569' }}>{agentStr}</div>
-                                    )}
-                                    {dateStr && (
-                                      <div style={{ color: '#475569' }}>{dateStr}</div>
-                                    )}
+                                    {rest.map((v, i) => (
+                                      <div key={i} style={{ color: '#475569' }}>{v}</div>
+                                    ))}
                                   </EuiText>
                                 );
                               } catch (error) {

@@ -197,8 +197,8 @@ export default function Layout({
                   style={{ textDecoration: 'none' }}
                 >
                   <img 
-                    src="/searchali_logo.png" 
-                    alt="SearchAli Logo" 
+                    src="/curationist.png" 
+                    alt="Curationist" 
                     style={{ 
                       height: '32px',
                       width: 'auto',
@@ -352,6 +352,19 @@ export default function Layout({
                               }}>{usedQueryType}</EuiBadge>
                             </EuiFlexItem>
                           )}
+                          <EuiFlexItem grow={false}>
+                            <EuiPopover
+                              button={
+                                <EuiButton iconType="gear" size="s" style={{ background: '#f8fafc', color: '#1a73e8', height: '32px', width: '32px', borderRadius: '8px' }}>
+                                </EuiButton>
+                              }
+                              panelPaddingSize="s"
+                            >
+                              <EuiText size="xs" color="subdued" style={{ marginBottom: 6 }}>Elasticsearch Credentials</EuiText>
+                              <EuiFieldText size="xs" placeholder="username" value={esUsername2} onChange={(e) => setEsUsername2(e.target.value)} style={{ height: 28, marginBottom: 6 }} />
+                              <EuiFieldText size="xs" type="password" placeholder="password" value={esPassword2} onChange={(e) => setEsPassword2(e.target.value)} style={{ height: 28 }} />
+                            </EuiPopover>
+                          </EuiFlexItem>
                         </EuiFlexGroup>
                       </EuiFlexItem>
                       
@@ -693,7 +706,7 @@ export default function Layout({
                 });
                 
                 if (response.ok) {
-                  setRandomSaveSuccess('Değişiklikler başarıyla kaydedildi!');
+                  setRandomSaveSuccess('Changes saved successfully.');
                   setRandomSaveError('');
                   // Update random words directly from the saved content
                   const words = randomWordsContent.split('\n').filter(word => word.trim().length > 0);
@@ -706,11 +719,11 @@ export default function Layout({
                   }, 2000);
                 } else {
                   const errorData = await response.json();
-                  setRandomSaveError(errorData.error || 'Dosya kaydedilemedi');
+                  setRandomSaveError(errorData.error || 'File could not be saved');
                 }
               } catch (error) {
                 console.error('Error saving random words:', error);
-                setRandomSaveError('Ağ hatası oluştu');
+                setRandomSaveError('Network error occurred');
               }
             }} fill>
               Save Changes
