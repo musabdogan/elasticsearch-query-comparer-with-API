@@ -103,7 +103,6 @@ const ResultTable = ({
       <EuiCard
         title={title}
         betaBadgeLabel="No Results"
-        betaBadgeTooltipContent="No search results found"
         style={{ marginBottom: '16px' }}
       >
         <EuiText color="subdued">No results to display</EuiText>

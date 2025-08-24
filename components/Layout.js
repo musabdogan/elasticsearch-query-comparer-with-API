@@ -60,11 +60,16 @@ export default function Layout({
   setItemsPerPage,
   displayField,
   setDisplayField,
+  selectedFields,
+  setSelectedFields,
+  selectedFields2,
+  setSelectedFields2,
 }) {
   const [randomWords, setRandomWords] = useState([]);
   const [popoverOpen1, setPopoverOpen1] = useState(null); // Old Query popover
   const [popoverOpen2, setPopoverOpen2] = useState(null); // New Query popover
   const [credentialsPopoverOpen, setCredentialsPopoverOpen] = useState(false);
+  const [oldCredentialsPopoverOpen, setOldCredentialsPopoverOpen] = useState(false);
   const [randomEditModalVisible, setRandomEditModalVisible] = useState(false);
   const [randomWordsContent, setRandomWordsContent] = useState('');
   const [randomSaveError, setRandomSaveError] = useState('');
@@ -338,6 +343,209 @@ export default function Layout({
                       
                     />
                   </EuiFlexItem>
+                  <EuiFlexItem grow={false}>
+                    <EuiPopover
+                      button={
+                        <EuiButton
+                          iconType="gear"
+                          size="s"
+                          style={{ 
+                            background: '#f8fafc', 
+                            color: '#1a73e8',
+                            height: '32px',
+                            width: '32px',
+                            borderRadius: '8px',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                            border: '1px solid #e2e8f0',
+                            padding: '0',
+                            minWidth: '32px'
+                          }}
+                          onClick={() => setOldCredentialsPopoverOpen(!oldCredentialsPopoverOpen)}
+                        />
+                      }
+                      isOpen={oldCredentialsPopoverOpen}
+                      closePopover={() => setOldCredentialsPopoverOpen(false)}
+                      anchorPosition="downLeft"
+                      panelPaddingSize="s"
+                      panelStyle={{ width: '400px', maxWidth: '90vw', overflow: 'auto' }}
+                    >
+                      <div style={{ width: '100%' }}>
+                        <EuiFlexGroup direction="column" gutterSize="xs" style={{ padding: 4 }}>
+                          {/* AWS Credentials Section */}
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
+                              <strong>AWS Credentials</strong>
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <EuiFieldText size="xs" placeholder="username" style={{ height: 28, marginBottom: 6 }} />
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <EuiFieldText size="xs" type="password" placeholder="password" style={{ height: 28, marginBottom: 12 }} />
+                          </EuiFlexItem>
+                          
+                          {/* Field Selection Section */}
+                          <EuiFlexItem>
+                            <EuiHorizontalRule margin="s" />
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
+                              <strong>Display Fields</strong>
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '8px', fontSize: '10px' }}>
+                              Select and reorder fields to display in results
+                            </EuiText>
+                          </EuiFlexItem>
+                          
+                          {/* Available Fields */}
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px', fontSize: '10px' }}>
+                              Available Fields:
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <div style={{ 
+                              maxHeight: '120px', 
+                              overflowY: 'auto', 
+                              border: '1px solid #e2e8f0', 
+                              borderRadius: '4px',
+                              padding: '4px',
+                              background: '#f8fafc'
+                            }}>
+                              {availableFields.map((field, index) => (
+                                <div key={field.value} style={{ 
+                                  display: 'flex', 
+                                  alignItems: 'center', 
+                                  padding: '2px 4px',
+                                  marginBottom: '2px',
+                                  background: selectedFields.includes(field.value) ? '#e6f3ff' : 'transparent',
+                                  borderRadius: '3px',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => {
+                                  if (selectedFields.includes(field.value)) {
+                                    setSelectedFields(selectedFields.filter(f => f !== field.value));
+                                  } else {
+                                    setSelectedFields([...selectedFields, field.value]);
+                                  }
+                                }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedFields.includes(field.value)}
+                                    onChange={() => {}}
+                                    style={{ marginRight: '6px', transform: 'scale(0.8)' }}
+                                  />
+                                  <span style={{ fontSize: '11px', color: '#374151' }}>
+                                    {field.text}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </EuiFlexItem>
+                          
+                          {/* Selected Fields Order */}
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px', fontSize: '10px', marginTop: '8px' }}>
+                              Selected Fields (drag to reorder):
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <div style={{ 
+                              minHeight: '60px', 
+                              border: '1px solid #e2e8f0', 
+                              borderRadius: '4px',
+                              padding: '4px',
+                              background: '#fff'
+                            }}>
+                              {selectedFields.length > 0 ? (
+                                selectedFields.map((fieldValue, index) => {
+                                  const field = availableFields.find(f => f.value === fieldValue);
+                                  return (
+                                    <div key={fieldValue} style={{ 
+                                      display: 'flex', 
+                                      alignItems: 'center', 
+                                      padding: '4px',
+                                      marginBottom: '2px',
+                                      background: '#f1f5f9',
+                                      borderRadius: '3px',
+                                      border: '1px solid #e2e8f0'
+                                    }}>
+                                      <span style={{ 
+                                        fontSize: '10px', 
+                                        color: '#6b7280',
+                                        marginRight: '6px',
+                                        cursor: 'grab'
+                                      }}>⋮⋮</span>
+                                      <span style={{ fontSize: '11px', color: '#374151', flex: 1 }}>
+                                        {field ? field.text : fieldValue}
+                                      </span>
+                                      <button
+                                        onClick={() => setSelectedFields(selectedFields.filter(f => f !== fieldValue))}
+                                        style={{ 
+                                          background: 'none',
+                                          border: 'none',
+                                          color: '#ef4444',
+                                          cursor: 'pointer',
+                                          fontSize: '10px',
+                                          padding: '0 4px'
+                                        }}
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <div style={{ 
+                                  fontSize: '10px', 
+                                  color: '#9ca3af', 
+                                  textAlign: 'center',
+                                  padding: '8px'
+                                }}>
+                                  No fields selected
+                                </div>
+                              )}
+                            </div>
+                          </EuiFlexItem>
+                          
+                          {/* Reset Button */}
+                          <EuiFlexItem>
+                            <EuiButton
+                              size="xs"
+                              onClick={() => setSelectedFields(['title', 'agent', 'date'])}
+                              style={{ 
+                                background: '#f3f4f6',
+                                color: '#374151',
+                                marginTop: '4px',
+                                height: '20px',
+                                fontSize: '10px'
+                              }}
+                            >
+                              Reset to Default
+                            </EuiButton>
+                          </EuiFlexItem>
+                          
+                          <EuiFlexItem>
+                            <EuiButton
+                              size="xs"
+                              fill
+                              onClick={() => setOldCredentialsPopoverOpen(false)}
+                              style={{ 
+                                background: '#1a73e8',
+                                marginTop: '8px',
+                                height: '24px',
+                                fontSize: '12px'
+                              }}
+                            >
+                              Save & Close
+                            </EuiButton>
+                          </EuiFlexItem>
+                        </EuiFlexGroup>
+                      </div>
+                    </EuiPopover>
+                  </EuiFlexItem>
                   <EuiFlexItem grow={true}>
                     <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="space-between">
                       <EuiFlexItem grow={false}>
@@ -352,19 +560,7 @@ export default function Layout({
                               }}>{usedQueryType}</EuiBadge>
                             </EuiFlexItem>
                           )}
-                          <EuiFlexItem grow={false}>
-                            <EuiPopover
-                              button={
-                                <EuiButton iconType="gear" size="s" style={{ background: '#f8fafc', color: '#1a73e8', height: '32px', width: '32px', borderRadius: '8px' }}>
-                                </EuiButton>
-                              }
-                              panelPaddingSize="s"
-                            >
-                              <EuiText size="xs" color="subdued" style={{ marginBottom: 6 }}>Elasticsearch Credentials</EuiText>
-                              <EuiFieldText size="xs" placeholder="username" value={esUsername2} onChange={(e) => setEsUsername2(e.target.value)} style={{ height: 28, marginBottom: 6 }} />
-                              <EuiFieldText size="xs" type="password" placeholder="password" value={esPassword2} onChange={(e) => setEsPassword2(e.target.value)} style={{ height: 28 }} />
-                            </EuiPopover>
-                          </EuiFlexItem>
+                          
                         </EuiFlexGroup>
                       </EuiFlexItem>
                       
@@ -394,6 +590,7 @@ export default function Layout({
                   onPageChange={handleSyncPageChange}
                   itemsPerPage={itemsPerPage}
                   displayField={displayField}
+                  selectedFields={selectedFields}
                   loading={loading}
                   onPopoverToggle={(hit) => setPopoverOpen1(popoverOpen1 === hit?._id ? null : hit?._id)}
                   popoverOpen={popoverOpen1}
@@ -482,13 +679,14 @@ export default function Layout({
                       anchorPosition="downLeft"
                       panelPaddingSize="s"
                       panelStyle={{ 
-                        width: '320px',
+                        width: '400px',
                         maxWidth: '90vw',
                         overflow: 'auto'
                       }}
                     >
                       <div style={{ width: '100%' }}>
                         <EuiFlexGroup direction="column" gutterSize="xs" style={{ padding: 4 }}>
+                          {/* Elasticsearch Credentials Section */}
                           <EuiFlexItem>
                             <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
                               <strong>Elasticsearch Credentials</strong>
@@ -514,10 +712,153 @@ export default function Layout({
                               onChange={(e) => setEsPassword2(e.target.value)}
                               fullWidth
                               size="xs"
-                              style={{ height: '28px' }}
+                              style={{ height: '28px', marginBottom: 12 }}
                             />
                           </EuiFlexItem>
-                          {/* OpenAI API Key field temporarily removed as requested */}
+                          
+                          {/* Field Selection Section */}
+                          <EuiFlexItem>
+                            <EuiHorizontalRule margin="s" />
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
+                              <strong>Display Fields</strong>
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '8px', fontSize: '10px' }}>
+                              Select and reorder fields to display in results
+                            </EuiText>
+                          </EuiFlexItem>
+                          
+                          {/* Available Fields */}
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px', fontSize: '10px' }}>
+                              Available Fields:
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <div style={{ 
+                              maxHeight: '120px', 
+                              overflowY: 'auto', 
+                              border: '1px solid #e2e8f0', 
+                              borderRadius: '4px',
+                              padding: '4px',
+                              background: '#f8fafc'
+                            }}>
+                              {availableFields.map((field, index) => (
+                                <div key={field.value} style={{ 
+                                  display: 'flex', 
+                                  alignItems: 'center', 
+                                  padding: '2px 4px',
+                                  marginBottom: '2px',
+                                  background: selectedFields2.includes(field.value) ? '#e6f3ff' : 'transparent',
+                                  borderRadius: '3px',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => {
+                                  if (selectedFields2.includes(field.value)) {
+                                    setSelectedFields2(selectedFields2.filter(f => f !== field.value));
+                                  } else {
+                                    setSelectedFields2([...selectedFields2, field.value]);
+                                  }
+                                }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedFields2.includes(field.value)}
+                                    onChange={() => {}}
+                                    style={{ marginRight: '6px', transform: 'scale(0.8)' }}
+                                  />
+                                  <span style={{ fontSize: '11px', color: '#374151' }}>
+                                    {field.text}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </EuiFlexItem>
+                          
+                          {/* Selected Fields Order */}
+                          <EuiFlexItem>
+                            <EuiText size="xs" color="subdued" style={{ marginBottom: '4px', fontSize: '10px', marginTop: '8px' }}>
+                              Selected Fields (drag to reorder):
+                            </EuiText>
+                          </EuiFlexItem>
+                          <EuiFlexItem>
+                            <div style={{ 
+                              minHeight: '60px', 
+                              border: '1px solid #e2e8f0', 
+                              borderRadius: '4px',
+                              padding: '4px',
+                              background: '#fff'
+                            }}>
+                              {selectedFields2.length > 0 ? (
+                                selectedFields2.map((fieldValue, index) => {
+                                  const field = availableFields.find(f => f.value === fieldValue);
+                                  return (
+                                    <div key={fieldValue} style={{ 
+                                      display: 'flex', 
+                                      alignItems: 'center', 
+                                      padding: '4px',
+                                      marginBottom: '2px',
+                                      background: '#f1f5f9',
+                                      borderRadius: '3px',
+                                      border: '1px solid #e2e8f0'
+                                    }}>
+                                      <span style={{ 
+                                        fontSize: '10px', 
+                                        color: '#6b7280',
+                                        marginRight: '6px',
+                                        cursor: 'grab'
+                                      }}>⋮⋮</span>
+                                      <span style={{ fontSize: '11px', color: '#374151', flex: 1 }}>
+                                        {field ? field.text : fieldValue}
+                                      </span>
+                                      <button
+                                        onClick={() => setSelectedFields2(selectedFields2.filter(f => f !== fieldValue))}
+                                        style={{ 
+                                          background: 'none',
+                                          border: 'none',
+                                          color: '#ef4444',
+                                          cursor: 'pointer',
+                                          fontSize: '10px',
+                                          padding: '0 4px'
+                                        }}
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <div style={{ 
+                                  fontSize: '10px', 
+                                  color: '#9ca3af', 
+                                  textAlign: 'center',
+                                  padding: '8px'
+                                }}>
+                                  No fields selected
+                                </div>
+                              )}
+                            </div>
+                          </EuiFlexItem>
+                          
+                          {/* Reset Button */}
+                          <EuiFlexItem>
+                            <EuiButton
+                              size="xs"
+                              onClick={() => setSelectedFields2(['title', 'agent', 'date'])}
+                              style={{ 
+                                background: '#f3f4f6',
+                                color: '#374151',
+                                marginTop: '4px',
+                                height: '20px',
+                                fontSize: '10px'
+                              }}
+                            >
+                              Reset to Default
+                            </EuiButton>
+                          </EuiFlexItem>
+                          
                           <EuiFlexItem>
                             <EuiButton
                               size="xs"
@@ -525,7 +866,7 @@ export default function Layout({
                               onClick={() => setCredentialsPopoverOpen(false)}
                               style={{ 
                                 background: '#1a73e8',
-                                marginTop: '0px',
+                                marginTop: '8px',
                                 height: '24px',
                                 fontSize: '12px'
                               }}
@@ -582,6 +923,7 @@ export default function Layout({
                   onPageChange={handleSyncPageChange}
                   itemsPerPage={itemsPerPage}
                   displayField={displayField}
+                  selectedFields={selectedFields2}
                   loading={loading2}
                   onPopoverToggle={(hit) => setPopoverOpen2(popoverOpen2 === hit?._id ? null : hit?._id)}
                   popoverOpen={popoverOpen2}

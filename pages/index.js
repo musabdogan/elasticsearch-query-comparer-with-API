@@ -93,6 +93,10 @@ export default function Home() {
   // Display field settings
   const [displayField, setDisplayField] = useState('title');
   
+  // Selected fields for table display
+  const [selectedFields, setSelectedFields] = useState(['title', 'agent', 'date']);
+  const [selectedFields2, setSelectedFields2] = useState(['title', 'agent', 'date']);
+  
   // Query type will be determined automatically based on search term
   
 
@@ -365,6 +369,10 @@ export default function Home() {
       setItemsPerPage={setItemsPerPage}
       displayField={displayField}
       setDisplayField={setDisplayField}
+      selectedFields={selectedFields}
+      setSelectedFields={setSelectedFields}
+      selectedFields2={selectedFields2}
+      setSelectedFields2={setSelectedFields2}
     />
   );
 } 
