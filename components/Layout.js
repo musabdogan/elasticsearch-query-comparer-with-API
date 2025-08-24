@@ -176,8 +176,10 @@ export default function Layout({
       <EuiHeader position="fixed" style={{ 
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)', 
         background: '#fff',
-        borderBottom: '1px solid #e2e8f0'
+        borderBottom: '1px solid #e2e8f0',
+        position: 'relative'
       }}>
+        {/* Logo Section - Left */}
         <EuiHeaderSection grow={false}>
           <EuiHeaderSectionItem border="right">
             <a 
@@ -192,7 +194,6 @@ export default function Layout({
                 style={{ 
                   height: '32px',
                   width: 'auto',
-                  marginRight: '16px',
                   cursor: 'pointer'
                 }} 
               />
@@ -200,14 +201,17 @@ export default function Layout({
           </EuiHeaderSectionItem>
         </EuiHeaderSection>
         
-        <EuiHeaderSection grow={true} style={{ justifyContent: 'center', alignItems: 'center' }}>
+        {/* Title Section - Center */}
+        <EuiHeaderSection grow={true} style={{ justifyContent: 'center', alignItems: 'center', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: 'auto', height: '100%' }}>
           <EuiHeaderSectionItem>
             <EuiText size="xl" style={{ 
               fontWeight: 'bold', 
               color: '#1a73e8',
               lineHeight: '32px',
               textAlign: 'center',
-              width: '100%'
+              whiteSpace: 'nowrap',
+              margin: 0,
+              padding: 0
             }}>
               Elasticsearch/Opensearch Query Comparer
             </EuiText>
@@ -217,10 +221,11 @@ export default function Layout({
 
 
       </EuiHeader>
-      <EuiPageTemplate style={{ paddingTop: 64 }} grow={true} restrictWidth="100%">
+      <EuiPageTemplate style={{ paddingTop: 8 }} grow={true} restrictWidth="100%">
         <EuiPageTemplate.Section>
           <EuiPanel paddingSize="l" hasShadow style={{ 
-            marginBottom: 24, 
+            marginBottom: 24,
+            marginTop: -24,
             background: '#fff',
             borderRadius: '12px',
             border: '1px solid #e2e8f0'
@@ -244,26 +249,38 @@ export default function Layout({
                   />
                 </a>
               </EuiFlexItem>
-              <EuiFlexItem grow={false} style={{ width: '300px' }}>
-                <EuiFieldText
-                  placeholder="Enter search term..."
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  fullWidth
-                  prepend={<EuiIcon type="search" color="#1a73e8" />}
-                  size="s"
-                  style={{ 
-                    verticalAlign: 'middle',
-                    borderRadius: '8px',
-                    border: '1px solid #e2e8f0',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                    textAlign: 'left',
-                    height: '32px',
-                    lineHeight: '32px',
-                    padding: '0 12px',
-                    fontSize: '16px'
-                  }}
-                />
+              <EuiFlexItem grow={false} style={{ width: '375px' }}>
+                <div style={{ position: 'relative' }}>
+                  <EuiFieldText
+                    placeholder="Enter search term..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    fullWidth
+                    size="s"
+                    style={{ 
+                      verticalAlign: 'middle',
+                      borderRadius: '8px',
+                      border: '1px solid #e2e8f0',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                      textAlign: 'left',
+                      height: '32px',
+                      lineHeight: '32px',
+                      padding: '0 12px 0 40px',
+                      fontSize: '16px'
+                    }}
+                  />
+                  <EuiIcon 
+                    type="search" 
+                    color="#1a73e8" 
+                    style={{ 
+                      position: 'absolute', 
+                      left: '12px', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)',
+                      zIndex: 1
+                    }} 
+                  />
+                </div>
               </EuiFlexItem>
               <EuiFlexItem grow={false}>
                 <EuiButton
@@ -338,7 +355,7 @@ export default function Layout({
               </EuiFlexItem>
             </EuiFlexGroup>
           </EuiPanel>
-          <EuiFlexGroup gutterSize="l" responsive={false} style={{ marginTop: -16 }}>
+          <EuiFlexGroup gutterSize="s" responsive={false} style={{ marginTop: -16 }}>
             {/* Left Panel - Should display result state (butterfly_dev) */}
             <EuiFlexItem grow={true}>
               <EuiPanel paddingSize="l" hasShadow style={{ 
@@ -352,28 +369,38 @@ export default function Layout({
                       <h3 style={{ color: '#1a73e8', margin: 0, fontSize: '16px' }}>Old Query</h3>
                     </EuiTitle>
                   </EuiFlexItem>
-                  <EuiFlexItem grow={false} style={{ width: '375px' }}>
-                    <EuiFieldText
-                      label="AWS API URL"
-                      placeholder="Your Query API URL"
-                      value={awsApiUrl}
-                      onChange={(e) => setAwsApiUrl(e.target.value)}
-                      fullWidth
-                      prepend={<EuiIcon type="link" color="#1a73e8" />}
-                      size="xs"
-                      style={{ 
-                        verticalAlign: 'middle',
-                        borderRadius: '8px',
-                        border: '1px solid #e2e8f0',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                        textAlign: 'left',
-                        height: '32px',
-                        lineHeight: '32px',
-                        padding: '0 12px',
-                        fontSize: '16px'
-                      }}
-                      
-                    />
+                  <EuiFlexItem grow={false} style={{ width: '300px' }}>
+                    <div style={{ position: 'relative' }}>
+                      <EuiFieldText
+                        placeholder="Your Query API URL"
+                        value={awsApiUrl}
+                        onChange={(e) => setAwsApiUrl(e.target.value)}
+                        fullWidth
+                        size="xs"
+                        style={{ 
+                          verticalAlign: 'middle',
+                          borderRadius: '8px',
+                          border: '1px solid #e2e8f0',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                          textAlign: 'left',
+                          height: '32px',
+                          lineHeight: '32px',
+                          padding: '0 12px 0 40px',
+                          fontSize: '16px'
+                        }}
+                      />
+                      <EuiIcon 
+                        type="link" 
+                        color="#1a73e8" 
+                        style={{ 
+                          position: 'absolute', 
+                          left: '12px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)',
+                          zIndex: 1
+                        }} 
+                      />
+                    </div>
                   </EuiFlexItem>
                   <EuiFlexItem grow={false}>
                     <EuiPopover
@@ -678,25 +705,37 @@ export default function Layout({
                   {/* AI toggle hidden as requested; functionality remains wired */}
 
                   <EuiFlexItem grow={false} style={{ width: '300px' }}>
-                    <EuiFieldText
-                      label="URL"
-                      placeholder="https://localhost:9200/new_index_name"
-                      value={esUrl2}
-                      onChange={(e) => setEsUrl2(e.target.value)}
-                      fullWidth
-                      prepend={<EuiIcon type="link" color="#1a73e8" />}
-                      size="xs"
-                      className="center-input"
-                      style={{ 
-                        verticalAlign: 'middle',
-                        borderRadius: '8px',
-                        border: '1px solid #e2e8f0',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                        textAlign: 'left',
-                        marginTop: '0px',
-                        fontSize: '16px'
-                      }}
-                    />
+                    <div style={{ position: 'relative' }}>
+                      <EuiFieldText
+                        placeholder="https://localhost:9200/new_index_name"
+                        value={esUrl2}
+                        onChange={(e) => setEsUrl2(e.target.value)}
+                        fullWidth
+                        size="xs"
+                        className="center-input"
+                        style={{ 
+                          verticalAlign: 'middle',
+                          borderRadius: '8px',
+                          border: '1px solid #e2e8f0',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                          textAlign: 'left',
+                          marginTop: '0px',
+                          fontSize: '16px',
+                          padding: '0 12px 0 40px'
+                        }}
+                      />
+                      <EuiIcon 
+                        type="link" 
+                        color="#1a73e8" 
+                        style={{ 
+                          position: 'absolute', 
+                          left: '12px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)',
+                          zIndex: 1
+                        }} 
+                      />
+                    </div>
                   </EuiFlexItem>
                   <EuiFlexItem grow={false}>
                     <EuiPopover
