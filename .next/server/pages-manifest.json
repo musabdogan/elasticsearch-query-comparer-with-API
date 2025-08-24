@@ -2,8 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
   "/api/queries": "pages/api/queries.js",
-  "/api/aws-search": "pages/api/aws-search.js",
-  "/api/elasticsearch-function-score": "pages/api/elasticsearch-function-score.js"
+  "/": "pages/index.js"
 }

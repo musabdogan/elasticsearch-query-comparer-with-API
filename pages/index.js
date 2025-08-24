@@ -37,12 +37,7 @@ const ITEMS_PER_PAGE = 10;
 
 export default function Home() {
   const router = useRouter();
-  const [awsApiUrl, setAwsApiUrl] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('awsApiUrl') || 'Your Query API URL';
-    }
-    return 'Your Query API URL';
-  });
+  const [awsApiUrl, setAwsApiUrl] = useState('Your Query API URL');
   const [esUrl1, setEsUrl1] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('esUrl1') || process.env.ES_URL_1 || '';
@@ -104,12 +99,11 @@ export default function Home() {
   // Save only non-sensitive values to localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('awsApiUrl', awsApiUrl);
       localStorage.setItem('esUrl1', esUrl1);
       localStorage.setItem('esUrl2', esUrl2);
       localStorage.setItem('embeddingsEnabled', embeddingsEnabled.toString());
     }
-  }, [awsApiUrl, esUrl1, esUrl2, embeddingsEnabled]);
+  }, [esUrl1, esUrl2, embeddingsEnabled]);
 
   // Debounce search term
   useEffect(() => {
