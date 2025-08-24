@@ -3,7 +3,7 @@ import { EuiProvider } from '@elastic/eui';
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <EuiProvider>
+    <EuiProvider colorMode="light">
       <Component {...pageProps} />
     </EuiProvider>
   );

@@ -74,6 +74,7 @@ export default function Layout({
   const [randomWordsContent, setRandomWordsContent] = useState('');
   const [randomSaveError, setRandomSaveError] = useState('');
   const [randomSaveSuccess, setRandomSaveSuccess] = useState('');
+  const [draggedField, setDraggedField] = useState(null);
   
   // Dynamic settings for display fields
 
@@ -107,6 +108,32 @@ export default function Layout({
     
     extractNestedFields(source);
     return fields;
+  };
+
+  // Drag and drop functions
+  const handleDragStart = (e, fieldValue) => {
+    setDraggedField(fieldValue);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, targetIndex, selectedFieldsArray, setSelectedFieldsFunction) => {
+    e.preventDefault();
+    if (!draggedField) return;
+    
+    const draggedIndex = selectedFieldsArray.indexOf(draggedField);
+    if (draggedIndex === -1) return;
+    
+    const newFields = [...selectedFieldsArray];
+    newFields.splice(draggedIndex, 1);
+    newFields.splice(targetIndex, 0, draggedField);
+    
+    setSelectedFieldsFunction(newFields);
+    setDraggedField(null);
   };
 
   // Get available fields from results
@@ -173,12 +200,14 @@ export default function Layout({
           </EuiHeaderSectionItem>
         </EuiHeaderSection>
         
-        <EuiHeaderSection grow={true} style={{ justifyContent: 'center' }}>
+        <EuiHeaderSection grow={true} style={{ justifyContent: 'center', alignItems: 'center' }}>
           <EuiHeaderSectionItem>
             <EuiText size="xl" style={{ 
               fontWeight: 'bold', 
               color: '#1a73e8',
-              lineHeight: '32px'
+              lineHeight: '32px',
+              textAlign: 'center',
+              width: '100%'
             }}>
               Elasticsearch/Opensearch Query Comparer
             </EuiText>
@@ -466,15 +495,24 @@ export default function Layout({
                                 selectedFields.map((fieldValue, index) => {
                                   const field = availableFields.find(f => f.value === fieldValue);
                                   return (
-                                    <div key={fieldValue} style={{ 
-                                      display: 'flex', 
-                                      alignItems: 'center', 
-                                      padding: '4px',
-                                      marginBottom: '2px',
-                                      background: '#f1f5f9',
-                                      borderRadius: '3px',
-                                      border: '1px solid #e2e8f0'
-                                    }}>
+                                    <div 
+                                      key={fieldValue} 
+                                      draggable
+                                      onDragStart={(e) => handleDragStart(e, fieldValue)}
+                                      onDragOver={handleDragOver}
+                                      onDrop={(e) => handleDrop(e, index, selectedFields, setSelectedFields)}
+                                      style={{ 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        padding: '4px',
+                                        marginBottom: '2px',
+                                        background: '#f1f5f9',
+                                        borderRadius: '3px',
+                                        border: '1px solid #e2e8f0',
+                                        cursor: 'grab',
+                                        opacity: draggedField === fieldValue ? 0.5 : 1
+                                      }}
+                                    >
                                       <span style={{ 
                                         fontSize: '10px', 
                                         color: '#6b7280',
@@ -485,7 +523,10 @@ export default function Layout({
                                         {field ? field.text : fieldValue}
                                       </span>
                                       <button
-                                        onClick={() => setSelectedFields(selectedFields.filter(f => f !== fieldValue))}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSelectedFields(selectedFields.filter(f => f !== fieldValue));
+                                        }}
                                         style={{ 
                                           background: 'none',
                                           border: 'none',
@@ -798,15 +839,24 @@ export default function Layout({
                                 selectedFields2.map((fieldValue, index) => {
                                   const field = availableFields.find(f => f.value === fieldValue);
                                   return (
-                                    <div key={fieldValue} style={{ 
-                                      display: 'flex', 
-                                      alignItems: 'center', 
-                                      padding: '4px',
-                                      marginBottom: '2px',
-                                      background: '#f1f5f9',
-                                      borderRadius: '3px',
-                                      border: '1px solid #e2e8f0'
-                                    }}>
+                                    <div 
+                                      key={fieldValue} 
+                                      draggable
+                                      onDragStart={(e) => handleDragStart(e, fieldValue)}
+                                      onDragOver={handleDragOver}
+                                      onDrop={(e) => handleDrop(e, index, selectedFields2, setSelectedFields2)}
+                                      style={{ 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        padding: '4px',
+                                        marginBottom: '2px',
+                                        background: '#f1f5f9',
+                                        borderRadius: '3px',
+                                        border: '1px solid #e2e8f0',
+                                        cursor: 'grab',
+                                        opacity: draggedField === fieldValue ? 0.5 : 1
+                                      }}
+                                    >
                                       <span style={{ 
                                         fontSize: '10px', 
                                         color: '#6b7280',
@@ -817,7 +867,10 @@ export default function Layout({
                                         {field ? field.text : fieldValue}
                                       </span>
                                       <button
-                                        onClick={() => setSelectedFields2(selectedFields2.filter(f => f !== fieldValue))}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSelectedFields2(selectedFields2.filter(f => f !== fieldValue));
+                                        }}
                                         style={{ 
                                           background: 'none',
                                           border: 'none',
