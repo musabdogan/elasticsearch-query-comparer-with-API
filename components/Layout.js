@@ -374,7 +374,7 @@ export default function Layout({
                           {/* AWS Credentials Section */}
                           <EuiFlexItem>
                             <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
-                              <strong>AWS Credentials</strong>
+                              <strong>AWS Credentials (if exist)</strong>
                             </EuiText>
                           </EuiFlexItem>
                           <EuiFlexItem>
@@ -689,7 +689,7 @@ export default function Layout({
                           {/* Elasticsearch Credentials Section */}
                           <EuiFlexItem>
                             <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
-                              <strong>Elasticsearch Credentials</strong>
+                              <strong>Elasticsearch Credentials (if exist)</strong>
                             </EuiText>
                           </EuiFlexItem>
                           <EuiFlexItem>
