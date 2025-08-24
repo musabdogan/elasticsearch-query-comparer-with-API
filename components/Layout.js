@@ -111,17 +111,20 @@ export default function Layout({
 
   // Get available fields from results
   const availableFields = useMemo(() => {
+    let fields = [];
+    
     // Try to get fields from any available results
     if (result?.body?.hits?.hits?.length > 0) {
-      return extractFieldsFromSource(result.body.hits.hits[0]._source);
+      fields = extractFieldsFromSource(result.body.hits.hits[0]._source);
+    } else if (results2?.body?.hits?.hits?.length > 0) {
+      fields = extractFieldsFromSource(results2.body.hits.hits[0]._source);
+    } else {
+      // Default field if no results available
+      fields = [{ value: 'title', text: 'title' }];
     }
-    if (results2?.body?.hits?.hits?.length > 0) {
-      return extractFieldsFromSource(results2.body.hits.hits[0]._source);
-    }
-    // Default field if no results available
-    return [
-      { value: 'title', text: 'title' }
-    ];
+    
+    // Sort fields alphabetically by text (display name)
+    return fields.sort((a, b) => a.text.localeCompare(b.text, undefined, { numeric: true, sensitivity: 'base' }));
   }, [result, results2]);
 
 
