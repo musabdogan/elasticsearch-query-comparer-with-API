@@ -469,13 +469,13 @@ export default function Layout({
                       anchorPosition="downLeft"
                       panelPaddingSize="s"
                       panelStyle={{ 
-                        maxWidth: '280px',
-                        maxHeight: '300px',
-                        overflow: 'hidden'
+                        width: '320px',
+                        maxWidth: '90vw',
+                        overflow: 'auto'
                       }}
                     >
-                      <div style={{ width: '280px' }}>
-                        <EuiFlexGroup direction="column" gutterSize="xs">
+                      <div style={{ width: '100%' }}>
+                        <EuiFlexGroup direction="column" gutterSize="xs" style={{ padding: 4 }}>
                           <EuiFlexItem>
                             <EuiText size="xs" color="subdued" style={{ marginBottom: '4px' }}>
                               <strong>Elasticsearch Credentials</strong>
@@ -504,23 +504,7 @@ export default function Layout({
                               style={{ height: '28px' }}
                             />
                           </EuiFlexItem>
-                          <EuiFlexItem>
-                            <EuiText size="xs" color="subdued" style={{ marginTop: '0px', marginBottom: '4px' }}>
-                              <strong>OpenAI API Key</strong>
-                            </EuiText>
-                          </EuiFlexItem>
-                          <EuiFlexItem>
-                            <EuiFieldText
-                              label="API Key"
-                              type="password"
-                              placeholder="sk-proj-..."
-                              value={openaiApiKey}
-                              onChange={(e) => setOpenaiApiKey(e.target.value)}
-                              fullWidth
-                              size="xs"
-                              style={{ height: '28px' }}
-                            />
-                          </EuiFlexItem>
+                          {/* OpenAI API Key field temporarily removed as requested */}
                           <EuiFlexItem>
                             <EuiButton
                               size="xs"

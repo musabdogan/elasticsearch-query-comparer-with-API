@@ -1,4 +1,4 @@
-# Elasticsearch Query Comparison Template
+# Elasticsearch/OpenSearch Query Comparer
 
 This project is a comprehensive Next.js template developed for comparing and analyzing Elasticsearch queries. It can be easily adapted for other customers.
 
@@ -30,7 +30,7 @@ elasticsearch-query-template/
 ## 🛠️ Installation
 
 ### Requirements
-- Node.js (v14+)
+- Node.js (v18+)
 - npm or yarn
 - Elasticsearch or OpenSearch access
 
@@ -47,10 +47,10 @@ cd elasticsearch-query-template
 npm install
 ```
 
-3. **Set up environment variables:**
-```bash
-cp .env.example .env
-# Edit the .env file
+3. (Optional) **Set up environment variables:**
+If you want to pre-fill defaults (e.g., an ES URL), add them to `.env.local`:
+```env
+ES_URL_1=https://your-elasticsearch:9200/index
 ```
 
 4. **Start the application:**
@@ -65,15 +65,10 @@ http://localhost:3000
 
 ## 🔧 Configuration
 
-### Environment Variables
-Configure the following variables in the `.env` file:
-
-```env
-ELASTICSEARCH_URL=http://your-elasticsearch-host:9200
-ELASTICSEARCH_INDEX=your-index-name
-ELASTICSEARCH_USERNAME=your-username
-ELASTICSEARCH_PASSWORD=your-password
-```
+### Credentials and security
+- No secrets are hardcoded in the repo.
+- Elasticsearch username/password and any OpenAI key are entered in the UI and kept in memory; they are NOT stored locally by default.
+- Prefer using per-user credentials at runtime.
 
 ### Elasticsearch Connection
 Update connection settings in `pages/api/elasticsearch.js`.
@@ -132,10 +127,11 @@ Sample queries are included in the project:
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
-```bash
-npm install -g vercel
-vercel
-```
+Framework Preset: Next.js
+- Install: npm install (default)
+- Build: next build (default)
+- Output: .next (default)
+Deploy URL: https://elasticsearch-query-comparer.vercel.app/
 
 ### Manual Deployment
 ```bash
@@ -143,10 +139,11 @@ npm run build
 npm start
 ```
 
-## 🔍 API Endpoints
-
-- `POST /api/elasticsearch` - Execute Elasticsearch query
-- `POST /api/dsl` - DSL query analysis
+## 🔍 API Endpoints (serverless)
+- `POST /api/aws-search`
+- `POST /api/elasticsearch-dynamic`
+- `POST /api/elasticsearch-function-score`
+- `POST /api/openai-embedding`
 
 ## 🤝 Contributing
 
@@ -167,6 +164,6 @@ If you encounter any issues, please create an issue or contact us.
 ---
 
 **Template Version:** 1.0.0  
-**Last Updated:** 2024-08-15  
+**Last Updated:** 2025-08-24  
 **Framework:** Next.js  
 **Elasticsearch Support:** 7.x, 8.x
