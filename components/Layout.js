@@ -277,6 +277,7 @@ export default function Layout({
                       left: '12px', 
                       top: '50%', 
                       transform: 'translateY(-50%)',
+                      marginTop: '2px',
                       zIndex: 1
                     }} 
                   />
@@ -296,7 +297,7 @@ export default function Layout({
                     height: '32px',
                     borderRadius: '8px',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                    marginRight: '8px'
+                    marginRight: '4px'
                   }}
                 >
                   Search
@@ -318,7 +319,8 @@ export default function Layout({
                     height: '32px',
                     borderRadius: '8px',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #e2e8f0',
+                    marginRight: '4px'
                   }}
                 >
                   Random
@@ -347,7 +349,7 @@ export default function Layout({
                     color: '#fff',
                     height: '32px',
                     borderRadius: '8px',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                   }}
                 >
                   Edit
@@ -384,9 +386,10 @@ export default function Layout({
                           boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                           textAlign: 'left',
                           height: '32px',
-                          lineHeight: '32px',
                           padding: '0 12px 0 40px',
-                          fontSize: '16px'
+                          fontSize: '16px',
+                          display: 'flex',
+                          alignItems: 'center'
                         }}
                       />
                       <EuiIcon 
@@ -397,6 +400,7 @@ export default function Layout({
                           left: '12px', 
                           top: '50%', 
                           transform: 'translateY(-50%)',
+                          marginTop: '2px',
                           zIndex: 1
                         }} 
                       />
@@ -719,9 +723,11 @@ export default function Layout({
                           border: '1px solid #e2e8f0',
                           boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                           textAlign: 'left',
-                          marginTop: '0px',
+                          height: '32px',
                           fontSize: '16px',
-                          padding: '0 12px 0 40px'
+                          padding: '0 12px 0 40px',
+                          display: 'flex',
+                          alignItems: 'center'
                         }}
                       />
                       <EuiIcon 
@@ -732,6 +738,7 @@ export default function Layout({
                           left: '12px', 
                           top: '50%', 
                           transform: 'translateY(-50%)',
+                          marginTop: '2px',
                           zIndex: 1
                         }} 
                       />
